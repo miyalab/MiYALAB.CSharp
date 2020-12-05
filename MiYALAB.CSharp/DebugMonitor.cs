@@ -29,9 +29,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-/// <summary>
-/// MiYALABで公開しているC#用ライブラリです。
-/// </summary>
 namespace MiYALAB.CSharp
 {
     /// <summary>
@@ -160,6 +157,14 @@ namespace MiYALAB.CSharp
         public void WriteLine(string text)
         {
             this.textBoxDebug.AppendText(text + Environment.NewLine);
+        }
+        
+        /// <summary>
+        /// デバッグモニタのテキストを消去します。
+        /// </summary>
+        public void Clear()
+        {
+            this.textBoxDebug.Text = "";
         }
     }
 }

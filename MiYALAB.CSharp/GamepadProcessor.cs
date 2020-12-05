@@ -29,9 +29,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 
-/// <summary>
-/// MiYALABで公開しているC#用ライブラリです。
-/// </summary>
 namespace MiYALAB.CSharp
 {
     /// <summary>
@@ -113,9 +110,6 @@ namespace MiYALAB.CSharp
         }
     }
 
-    /// <summary>
-    /// 各種ゲームパッドのボタン情報
-    /// </summary>
     namespace Gamepad
     {
         /// <summary>
@@ -123,19 +117,61 @@ namespace MiYALAB.CSharp
         /// </summary>
         public class DUALSHOCK4
         {
+            /// <summary>
+            /// □ボタン
+            /// </summary>
             public const int SQUARE = 0x00000001;
+            /// <summary>
+            /// ×ボタン
+            /// </summary>
             public const int CROSS = 0x00000002;
+            /// <summary>
+            /// 〇ボタン
+            /// </summary>
             public const int CIRCLE = 0x00000004;
+            /// <summary>
+            /// △ボタン
+            /// </summary>
             public const int TRIANGLE = 0x00000008;
+            /// <summary>
+            /// L1ボタン
+            /// </summary>
             public const int L1 = 0x00000010;
+            /// <summary>
+            /// R1ボタン
+            /// </summary>
             public const int R1 = 0x00000020;
+            /// <summary>
+            /// L2ボタン
+            /// </summary>
             public const int L2 = 0x00000040;
+            /// <summary>
+            /// R2ボタン
+            /// </summary>
             public const int R2 = 0x00000080;
+            /// <summary>
+            /// SHAREボタン
+            /// </summary>
             public const int SHARE = 0x00000100;
+            /// <summary>
+            /// OPTIONSボタン
+            /// </summary>
             public const int OPTIONS = 0x00000200;
+            /// <summary>
+            /// L3ボタン
+            /// </summary>
             public const int L3 = 0x00000400;
+            /// <summary>
+            /// R3ボタン
+            /// </summary>
             public const int R3 = 0x00000800;
+            /// <summary>
+            /// PSボタン
+            /// </summary>
             public const int PS = 0x00001000;
+            /// <summary>
+            /// PADボタン
+            /// </summary>
             public const int PAD = 0x00002000;
 
         }

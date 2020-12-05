@@ -49,17 +49,11 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="GamepadProcessor.cs" />
-    <Compile Include="GraphMonitor.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="DebugMonitor.resx">
       <DependentUpon>DebugMonitor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GraphMonitor.resx">
-      <DependentUpon>GraphMonitor.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
