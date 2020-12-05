@@ -29,7 +29,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MiYALAB.CSharp
+namespace MiYALAB.CSharp.Monitor
 {
     /// <summary>
     /// デバッグモニタを表示するフォームクラスです。
@@ -58,7 +58,7 @@ namespace MiYALAB.CSharp
             InitializeComponent();
             
             this.Show();
-            MoveWindow(positionX, positionY);
+            ChangeLocationWindow(positionX, positionY);
         }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace MiYALAB.CSharp
             InitializeComponent();
 
             this.Show();
-            MoveWindow(positionX, positionY);
+            ChangeLocationWindow(positionX, positionY);
             ChangeWindowSize(sizeX, sizeY);
         }
 
@@ -122,7 +122,7 @@ namespace MiYALAB.CSharp
         }
 
         /// <summary>
-        /// デバッグモニタのサイズを変更します。
+        /// モニタのサイズを変更します。
         /// </summary>
         /// <param name="x">変更後のウインドウの幅</param>
         /// <param name="y">変更後のウインドウの高さ</param>
@@ -132,11 +132,11 @@ namespace MiYALAB.CSharp
         }
 
         /// <summary>
-        /// デバッグモニタの表示位置を変更します。
+        /// モニタの表示位置を変更します。
         /// </summary>
         /// <param name="x">変更後のウインドウのx座標</param>
         /// <param name="y">変更後のウインドウのy座標</param>
-        public void MoveWindow(int x, int y)
+        public void ChangeLocationWindow(int x, int y)
         {
             this.Location = new System.Drawing.Point(x, y);
         }
