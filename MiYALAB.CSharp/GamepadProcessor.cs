@@ -31,87 +31,87 @@ using System.Runtime.InteropServices;
 
 namespace MiYALAB.CSharp
 {
-    /// <summary>
-    /// ゲームパッドコントロール用クラス
-    /// </summary>
-    class GamepadProcessor
-    {
-        public const int MM_JOY1MOVE = 0x3A0;
-        public const int MM_JOY2MOVE = 0x3A1;
-        public const int MM_JOY1ZMOVE = 0x3A2;
-        public const int MM_JOY2ZMOVE = 0x3A3;
-        public const int MM_JOY1BUTTONDOWN = 0x3B5;
-        public const int MM_JOY2BUTTONDOWN = 0x3B6;
-        public const int MM_JOY1BUTTONUP = 0x3B7;
-        public const int MM_JOY2BUTTONUP = 0x3B8;
-
-        public const int MMSYSERR_BADDEVICEID = 2;
-        public const int MMSYSERR_NODRIVER = 6;
-        public const int MMSYSERR_INVALPARAM = 11;
-        public const int JOYERR_PARMS = 165;
-        public const int JOYERR_NOCANDO = 166;
-        public const int JOYERR_UNPLUGGED = 167;
-
-        public const int JOY_RETURNX = 0x001;
-        public const int JOY_RETURNY = 0x002;
-        public const int JOY_RETURNZ = 0x004;
-        public const int JOY_RETURNR = 0x008;
-        public const int JOY_RETURNU = 0x010;
-        public const int JOY_RETURNV = 0x020;
-        public const int JOY_RETURNPOV = 0x040;
-        public const int JOY_RETURNBUTTONS = 0x080;
-        public const int JOY_RETURNALL = 0x0FF;
-
-        public const int JOY_RETURNRAWDATA = 0x100;
-        public const int JOY_RETURNPOVCTS = 0x200;
-        public const int JOY_RETURNCENTERED = 0x400;
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct JOYINFOEX
-        {
-            public int dwSize;
-            public int dwFlags;
-            public int dwXpos;
-            public int dwYpos;
-            public int dwZpos;
-            public int dwRpos;
-            public int dwUpos;
-            public int dwVpos;
-            public int dwButtons;
-            public int dwButtonNumber;
-            public int dwPOV;
-            public int dwReserved1;
-            public int dwReserved2;
-        }
-
-        public static class GetInfo
-        {
-            /// <summary>
-            /// 最大接続ゲームパッド数取得
-            /// </summary>
-            /// <returns>最大ゲームパッド数</returns>
-            [DllImport("winmm.dll")]
-            public static extern int joyGetNumDevs();
-
-            /// <summary>
-            /// ゲームパッド入力パラメータ更新
-            /// </summary>
-            /// <param name="uJoyID"></param>
-            /// <param name="pji"></param>
-            /// <returns>0：接続, otherwise：未接続</returns>
-            [DllImport("winmm.dll")]
-            public static extern int joyGetPosEx(int uJoyID, ref JOYINFOEX pji);
-
-            [DllImport("winmm.dll")]
-            public static extern int joySetCapture(IntPtr hwnd, int uJoyID, int uPeriod, int fChanged);
-
-            [DllImport("winmm.dll")]
-            public static extern int joyReleaseCapture(int uJoyID);
-        }
-    }
-
     namespace Gamepad
     {
+        /// <summary>
+        /// ゲームパッドコントロール用クラス
+        /// </summary>
+        class GamepadProcessor
+        {
+            public const int MM_JOY1MOVE = 0x3A0;
+            public const int MM_JOY2MOVE = 0x3A1;
+            public const int MM_JOY1ZMOVE = 0x3A2;
+            public const int MM_JOY2ZMOVE = 0x3A3;
+            public const int MM_JOY1BUTTONDOWN = 0x3B5;
+            public const int MM_JOY2BUTTONDOWN = 0x3B6;
+            public const int MM_JOY1BUTTONUP = 0x3B7;
+            public const int MM_JOY2BUTTONUP = 0x3B8;
+
+            public const int MMSYSERR_BADDEVICEID = 2;
+            public const int MMSYSERR_NODRIVER = 6;
+            public const int MMSYSERR_INVALPARAM = 11;
+            public const int JOYERR_PARMS = 165;
+            public const int JOYERR_NOCANDO = 166;
+            public const int JOYERR_UNPLUGGED = 167;
+
+            public const int JOY_RETURNX = 0x001;
+            public const int JOY_RETURNY = 0x002;
+            public const int JOY_RETURNZ = 0x004;
+            public const int JOY_RETURNR = 0x008;
+            public const int JOY_RETURNU = 0x010;
+            public const int JOY_RETURNV = 0x020;
+            public const int JOY_RETURNPOV = 0x040;
+            public const int JOY_RETURNBUTTONS = 0x080;
+            public const int JOY_RETURNALL = 0x0FF;
+
+            public const int JOY_RETURNRAWDATA = 0x100;
+            public const int JOY_RETURNPOVCTS = 0x200;
+            public const int JOY_RETURNCENTERED = 0x400;
+
+            [StructLayout(LayoutKind.Sequential)]
+            public struct JOYINFOEX
+            {
+                public int dwSize;
+                public int dwFlags;
+                public int dwXpos;
+                public int dwYpos;
+                public int dwZpos;
+                public int dwRpos;
+                public int dwUpos;
+                public int dwVpos;
+                public int dwButtons;
+                public int dwButtonNumber;
+                public int dwPOV;
+                public int dwReserved1;
+                public int dwReserved2;
+            }
+
+            public static class GetInfo
+            {
+                /// <summary>
+                /// 最大接続ゲームパッド数取得
+                /// </summary>
+                /// <returns>最大ゲームパッド数</returns>
+                [DllImport("winmm.dll")]
+                public static extern int joyGetNumDevs();
+
+                /// <summary>
+                /// ゲームパッド入力パラメータ更新
+                /// </summary>
+                /// <param name="uJoyID"></param>
+                /// <param name="pji"></param>
+                /// <returns>0：接続, otherwise：未接続</returns>
+                [DllImport("winmm.dll")]
+                public static extern int joyGetPosEx(int uJoyID, ref JOYINFOEX pji);
+
+                [DllImport("winmm.dll")]
+                public static extern int joySetCapture(IntPtr hwnd, int uJoyID, int uPeriod, int fChanged);
+
+                [DllImport("winmm.dll")]
+                public static extern int joyReleaseCapture(int uJoyID);
+            }
+        }
+
         /// <summary>
         /// GamepadProcessor用 DualShock4 シンボル値
         /// </summary>
