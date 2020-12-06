@@ -8,14 +8,14 @@ using System.Drawing;
 namespace MiYALAB.CSharp.Monitor
 {
     /// <summary>
-    /// 画像描画モニタを表示するフォームクラスです。
+    /// 画像描画モニタを表示するフォームクラスです．
     /// </summary>
     public partial class GraphicMonitor : System.Windows.Forms.Form
     {
         private System.Windows.Forms.PictureBox pictureBox;
 
         /// <summary>
-        /// 画像描画モニタを表示するフォームクラスです。
+        /// 画像描画モニタを表示するフォームクラスです．
         /// </summary>
         GraphicMonitor()
         {
@@ -23,7 +23,7 @@ namespace MiYALAB.CSharp.Monitor
         }
 
         /// <summary>
-        /// 画像描画モニタを表示するフォームクラスです。
+        /// 画像描画モニタを表示するフォームクラスです．
         /// </summary>
         /// <param name="positionX">変更後のウインドウのx座標</param>
         /// <param name="positionY">変更後のウインドウのy座標</param>
@@ -36,7 +36,7 @@ namespace MiYALAB.CSharp.Monitor
         }
 
         /// <summary>
-        /// 画像描画モニタを表示するフォームクラスです。
+        /// 画像描画モニタを表示するフォームクラスです．
         /// </summary>
         /// <param name="positionX">変更後のウインドウのx座標</param>
         /// <param name="positionY">変更後のウインドウのy座標</param>
@@ -85,7 +85,7 @@ namespace MiYALAB.CSharp.Monitor
         }
 
         /// <summary>
-        /// モニタのサイズを変更します。
+        /// モニタのサイズを変更します．
         /// </summary>
         /// <param name="x">変更後のウインドウの幅</param>
         /// <param name="y">変更後のウインドウの高さ</param>
@@ -95,7 +95,7 @@ namespace MiYALAB.CSharp.Monitor
         }
 
         /// <summary>
-        /// モニタの表示位置を変更します。
+        /// モニタの表示位置を変更します．
         /// </summary>
         /// <param name="x">変更後のウインドウのx座標</param>
         /// <param name="y">変更後のウインドウのy座標</param>
@@ -105,7 +105,7 @@ namespace MiYALAB.CSharp.Monitor
         }
 
         /// <summary>
-        /// 描画画像を取得します。
+        /// 描画画像を取得します．
         /// </summary>
         /// <returns>描画画像</returns>
         public Bitmap GetGraphic()
@@ -114,7 +114,7 @@ namespace MiYALAB.CSharp.Monitor
         }
 
         /// <summary>
-        /// 画像を描画します。
+        /// 画像を描画します．
         /// </summary>
         /// <param name="bmp">描画画像</param>
         public void DrawGraphic(Bitmap bmp)
@@ -124,7 +124,7 @@ namespace MiYALAB.CSharp.Monitor
         }
 
         /// <summary>
-        /// 描画画像を削除します。
+        /// 描画画像を削除します．
         /// </summary>
         public void Clear()
         {

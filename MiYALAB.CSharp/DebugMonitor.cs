@@ -32,14 +32,14 @@ using System.Threading.Tasks;
 namespace MiYALAB.CSharp.Monitor
 {
     /// <summary>
-    /// デバッグモニタを表示するフォームクラスです。
+    /// デバッグモニタを表示するフォームクラスです．
     /// </summary>
     public partial class DebugMonitor : System.Windows.Forms.Form
     {
         private System.Windows.Forms.TextBox textBoxDebug;
 
         /// <summary>
-        /// デバッグモニタを表示するフォームクラスです。
+        /// デバッグモニタを表示するフォームクラスです．
         /// </summary>
         public DebugMonitor()
         {
@@ -49,7 +49,7 @@ namespace MiYALAB.CSharp.Monitor
         }
 
         /// <summary>
-        /// デバッグモニタを表示するフォームクラスです。
+        /// デバッグモニタを表示するフォームクラスです．
         /// </summary>
         /// <param name="positionX">変更後のウインドウのx座標</param>
         /// <param name="positionY">変更後のウインドウのy座標</param>
@@ -62,7 +62,7 @@ namespace MiYALAB.CSharp.Monitor
         }
 
         /// <summary>
-        /// デバッグモニタを表示するフォームクラスです。
+        /// デバッグモニタを表示するフォームクラスです．
         /// </summary>
         /// <param name="positionX">変更後のウインドウのx座標</param>
         /// <param name="positionY">変更後のウインドウのy座標</param>
@@ -122,7 +122,7 @@ namespace MiYALAB.CSharp.Monitor
         }
 
         /// <summary>
-        /// モニタのサイズを変更します。
+        /// モニタのサイズを変更します．
         /// </summary>
         /// <param name="x">変更後のウインドウの幅</param>
         /// <param name="y">変更後のウインドウの高さ</param>
@@ -132,7 +132,7 @@ namespace MiYALAB.CSharp.Monitor
         }
 
         /// <summary>
-        /// モニタの表示位置を変更します。
+        /// モニタの表示位置を変更します．
         /// </summary>
         /// <param name="x">変更後のウインドウのx座標</param>
         /// <param name="y">変更後のウインドウのy座標</param>
@@ -142,7 +142,7 @@ namespace MiYALAB.CSharp.Monitor
         }
 
         /// <summary>
-        /// デバッグモニタにテキストを挿入します。
+        /// デバッグモニタにテキストを挿入します．
         /// </summary>
         /// <param name="text">挿入テキスト</param>
         public void Write(string text)
@@ -151,7 +151,7 @@ namespace MiYALAB.CSharp.Monitor
         }
 
         /// <summary>
-        /// デバッグモニタに改行付きでテキストを挿入します。
+        /// デバッグモニタに改行付きでテキストを挿入します．
         /// </summary>
         /// <param name="text">挿入テキスト</param>
         public void WriteLine(string text)
@@ -160,7 +160,7 @@ namespace MiYALAB.CSharp.Monitor
         }
         
         /// <summary>
-        /// デバッグモニタのテキストを消去します。
+        /// デバッグモニタのテキストを消去します．
         /// </summary>
         public void Clear()
         {
