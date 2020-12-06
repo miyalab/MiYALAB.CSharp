@@ -50,23 +50,25 @@ namespace MiYALAB.CSharp
             public const int MMSYSERR_BADDEVICEID = 2;
             public const int MMSYSERR_NODRIVER = 6;
             public const int MMSYSERR_INVALPARAM = 11;
-            public const int JOYERR_PARMS = 165;
-            public const int JOYERR_NOCANDO = 166;
-            public const int JOYERR_UNPLUGGED = 167;
 
-            public const int JOY_RETURNX = 0x001;
-            public const int JOY_RETURNY = 0x002;
-            public const int JOY_RETURNZ = 0x004;
-            public const int JOY_RETURNR = 0x008;
-            public const int JOY_RETURNU = 0x010;
-            public const int JOY_RETURNV = 0x020;
-            public const int JOY_RETURNPOV = 0x040;
-            public const int JOY_RETURNBUTTONS = 0x080;
-            public const int JOY_RETURNALL = 0x0FF;
+            public const int JOY_ERR_NONE = 0;
+            public const int JOY_ERR_PARMS = 165;
+            public const int JOY_ERR_NOCANDO = 166;
+            public const int JOY_ERR_UNPLUGGED = 167;
 
-            public const int JOY_RETURNRAWDATA = 0x100;
-            public const int JOY_RETURNPOVCTS = 0x200;
-            public const int JOY_RETURNCENTERED = 0x400;
+            public const int JOY_RETURN_X = 0x001;
+            public const int JOY_RETURN_Y = 0x002;
+            public const int JOY_RETURN_Z = 0x004;
+            public const int JOY_RETURN_R = 0x008;
+            public const int JOY_RETURN_U = 0x010;
+            public const int JOY_RETURN_V = 0x020;
+            public const int JOY_RETURN_POV = 0x040;
+            public const int JOY_RETURN_BUTTONS = 0x080;
+            public const int JOY_RETURN_ALL = 0x0FF;
+
+            public const int JOY_RETURN_RAWDATA = 0x100;
+            public const int JOY_RETURN_POVCTS = 0x200;
+            public const int JOY_RETURN_CENTERED = 0x400;
 
             [StructLayout(LayoutKind.Sequential)]
             public struct JOYINFOEX
