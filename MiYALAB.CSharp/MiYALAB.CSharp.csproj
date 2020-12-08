@@ -52,7 +52,9 @@
     <Compile Include="GraphicMonitor.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="ImageProcessor.Binary.cs" />
     <Compile Include="ImageProcessor.cs" />
+    <Compile Include="ImageProcessor.Filter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
