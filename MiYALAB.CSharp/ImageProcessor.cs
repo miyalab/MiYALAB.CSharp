@@ -26,8 +26,10 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace MiYALAB.CSharp.Image
 {
@@ -62,13 +64,6 @@ namespace MiYALAB.CSharp.Image
             return rgbValues;
         }
 
-        /// <summary>
-        /// byte配列をBitmapに変換する．
-        /// </summary>
-        /// <param name="rgbValues">1 pixel = 4 byte (+3:A, +2:R, +1:G, +0:B) に変換されたたbyte配列</param>
-        /// <param name="width">変換後のbitmapの幅</param>
-        /// <param name="height">変換後のbitmapの高さ</param>
-        /// <returns>Bitmap</returns>
         public static Bitmap ByteArrayToBitmap(byte[] rgbValues, int width, int height)
         {
             Bitmap bmp = new Bitmap(width, height);
@@ -180,7 +175,8 @@ namespace MiYALAB.CSharp.Image
         /// <summary>
         /// 色の輝度データ
         /// </summary>
-        public static class Color{
+        public static class Color
+        {
             /// <summary>
             /// 黒色(0, 0, 0)
             /// </summary>
@@ -219,11 +215,12 @@ namespace MiYALAB.CSharp.Image
         /// <returns>トリミング画像のbyte配列</returns>
         public static byte[] Trim(byte[] rgbValues, int posX, int posY, int bmpWidth, int bmpHeight, int trimWidth, int trimHeight)
         {
+            int x, y;
             byte[] ret = new byte[4 * trimWidth * trimHeight];
 
-            for(int y = 0; y < trimHeight; y++)
+            for (y = 0; y < trimHeight; y++)
             {
-                for (int x = 0; x < trimWidth; x++)
+                for (x = 0; x < trimWidth; x++)
                 {
                     ret[4 * (trimWidth * y + x)] = rgbValues[4 * (bmpWidth * (y + posY) + (x + posX))];
                     ret[4 * (trimWidth * y + x) + 1] = rgbValues[4 * (bmpWidth * (y + posY) + (x + posX)) + 1];
@@ -319,9 +316,11 @@ namespace MiYALAB.CSharp.Image
         /// <returns>グレースケール画像のbyte配列</returns>
         public static byte[] GrayscaleConverter(byte[] rgbValues, int method)
         {
+            byte[] ret = new byte[rgbValues.Length];
+            double work = 0;
+
             for (int i = 0; i < rgbValues.Length; i += 4)
             {
-                double work = 0;
                 if (method == GRAYSCALE.Average) work = (rgbValues[i] + rgbValues[i + 1] + rgbValues[i + 2]) / 3;
                 else if (method == GRAYSCALE.BT601) work = 0.299 * rgbValues[i + 2] + 0.587 * rgbValues[i + 1] + 0.114 * rgbValues[i];
                 else if (method == GRAYSCALE.BT709) work = 0.2126 * rgbValues[i + 2] + 0.7152 * rgbValues[i + 1] + 0.0722 * rgbValues[i];
@@ -329,10 +328,11 @@ namespace MiYALAB.CSharp.Image
                 else if (method == GRAYSCALE.Max) work = Math.Max(Math.Max(rgbValues[i], rgbValues[i + 1]), rgbValues[i + 2]);
                 else if (method == GRAYSCALE.Min) work = Math.Min(Math.Min(rgbValues[i], rgbValues[i + 1]), rgbValues[i + 2]);
 
-                rgbValues[i] = rgbValues[i + 1] = rgbValues[i + 2] = (byte)work;
+                ret[i] = ret[i + 1] = ret[i + 2] = (byte)work;
+                ret[i + 3] = 255;
             }
 
-            return rgbValues;
+            return ret;
         }
 
         /// <summary>
@@ -359,14 +359,17 @@ namespace MiYALAB.CSharp.Image
         /// <returns>色反転画像のbyte配列</returns>
         public static byte[] Not(byte[] rgbValues)
         {
+            byte[] ret = new byte[rgbValues.Length];
+
             for (int i = 0; i < rgbValues.Length; i += 4)
             {
-                rgbValues[i] = (byte)Math.Abs(255 - rgbValues[i]);
-                rgbValues[i + 1] = (byte)Math.Abs(255 - rgbValues[i + 1]);
-                rgbValues[i + 2] = (byte)Math.Abs(255 - rgbValues[i + 2]);
+                ret[i] = (byte)Math.Abs(255 - rgbValues[i]);
+                ret[i + 1] = (byte)Math.Abs(255 - rgbValues[i + 1]);
+                ret[i + 2] = (byte)Math.Abs(255 - rgbValues[i + 2]);
+                ret[i + 3] = 255;
             }
 
-            return rgbValues;
+            return ret;
         }
 
         /// <summary>
@@ -393,14 +396,17 @@ namespace MiYALAB.CSharp.Image
         /// <returns>論理積画像のbyte配列</returns>
         public static byte[] And(byte[] rgbValues1, byte[] rgbValues2)
         {
-            for(int i = 0; i < rgbValues1.Length; i += 4)
+            byte[] ret = new byte[rgbValues1.Length];
+
+            for (int i = 0; i < rgbValues1.Length; i += 4)
             {
-                rgbValues1[i] = Math.Min(rgbValues1[i], rgbValues2[i]);
-                rgbValues1[i+1] = Math.Min(rgbValues1[i+1], rgbValues2[i+1]);
-                rgbValues1[i+2] = Math.Min(rgbValues1[i+2], rgbValues2[i+2]);
+                ret[i] = Math.Min(rgbValues1[i], rgbValues2[i]);
+                ret[i + 1] = Math.Min(rgbValues1[i + 1], rgbValues2[i + 1]);
+                ret[i + 2] = Math.Min(rgbValues1[i + 2], rgbValues2[i + 2]);
+                ret[i + 3] = 255;
             }
 
-            return rgbValues1;
+            return ret;
         }
 
         /// <summary>
@@ -428,14 +434,17 @@ namespace MiYALAB.CSharp.Image
         /// <returns>論理和画像のbyte配列</returns>
         public static byte[] Or(byte[] rgbValues1, byte[] rgbValues2)
         {
+            byte[] ret = new byte[rgbValues1.Length];
+
             for (int i = 0; i < rgbValues1.Length; i += 4)
             {
-                rgbValues1[i] = Math.Max(rgbValues1[i], rgbValues2[i]);
-                rgbValues1[i + 1] = Math.Max(rgbValues1[i + 1], rgbValues2[i + 1]);
-                rgbValues1[i + 2] = Math.Max(rgbValues1[i + 2], rgbValues2[i + 2]);
+                ret[i] = Math.Max(rgbValues1[i], rgbValues2[i]);
+                ret[i + 1] = Math.Max(rgbValues1[i + 1], rgbValues2[i + 1]);
+                ret[i + 2] = Math.Max(rgbValues1[i + 2], rgbValues2[i + 2]);
+                ret[i + 3] = 255;
             }
 
-            return rgbValues1;
+            return ret;
         }
 
         /// <summary>
@@ -468,24 +477,29 @@ namespace MiYALAB.CSharp.Image
         /// <param name="posY">ポインタの座標(Y)</param>
         /// <param name="width">ポインタの幅</param>
         /// <param name="height">ポインタの高さ</param>
-        /// <returns></returns>
-        public static byte[] PasteSquare(byte[] rgbValues, int bmpWidth, int bmpHeight,
+        /// <returns>四角のポイント描画画像のbyte配列</returns>
+        public static byte[] PointSquare(byte[] rgbValues, int bmpWidth, int bmpHeight,
             byte R, byte G, byte B, int posX, int posY, int width, int height)
         {
+            int x, y;
             int wWork = width / 2;
             int hWork = height / 2;
-            for(int y = posY - hWork; y <= posY + hWork; y++)
+
+            byte[] ret = new byte[rgbValues.Length];
+            Array.Copy(rgbValues, ret, rgbValues.Length);
+
+            for (y = posY - hWork; y <= posY + hWork; y++)
             {
-                for(int x = posX - wWork; x <= posX + wWork; x++)
+                for (x = posX - wWork; x <= posX + wWork; x++)
                 {
                     if (x < 0 || bmpWidth <= x || y < 0 || bmpHeight <= y) continue;
-                    rgbValues[4 * (bmpWidth * y + x)] = B;
-                    rgbValues[4 * (bmpWidth * y + x) + 1] = G;
-                    rgbValues[4 * (bmpWidth * y + x) + 2] = R;
+                    ret[4 * (bmpWidth * y + x)] = B;
+                    ret[4 * (bmpWidth * y + x) + 1] = G;
+                    ret[4 * (bmpWidth * y + x) + 2] = R;
                 }
             }
 
-            return rgbValues;
+            return ret;
         }
 
         /// <summary>
@@ -496,10 +510,105 @@ namespace MiYALAB.CSharp.Image
         /// <param name="color">ポインタの色</param>
         /// <param name="pos">ポインタの座標</param>
         /// <param name="size">ポインタのサイズ</param>
-        /// <returns></returns>
-        public static byte[] PasteSquare(byte[] rgbValues, Size bmpSize, RGB color, Point pos, Size size)
+        /// <returns>>四角のポイント描画画像のbyte配列</returns>
+        public static byte[] PointSquare(byte[] rgbValues, Size bmpSize, RGB color, Point pos, Size size)
         {
-            return PasteSquare(rgbValues, bmpSize.Width, bmpSize.Height, color.R, color.G, color.B, pos.X, pos.Y, size.Width, size.Height);
+            return PointSquare(rgbValues, bmpSize.Width, bmpSize.Height, color.R, color.G, color.B, pos.X, pos.Y, size.Width, size.Height);
+        }
+
+        /// <summary>
+        /// bitmapデータに四角のポインタを描画します．
+        /// </summary>
+        /// <param name="bmp">bitmap</param>
+        /// <param name="R">ポインタの色(R)</param>
+        /// <param name="G">ポインタの色(G)</param>
+        /// <param name="B">ポインタの色(B)</param>
+        /// <param name="posX">ポインタの座標(X)</param>
+        /// <param name="posY">ポインタの座標(Y)</param>
+        /// <param name="width">ポインタの幅</param>
+        /// <param name="height">ポインタの高さ</param>
+        /// <returns>四角のポイント描画画像</returns>
+        public static Bitmap PointSquare(Bitmap bmp, byte R, byte G, byte B, int posX, int posY, int width, int height)
+        {
+            return ByteArrayToBitmap(
+                PointSquare(BitmapToByteArray(bmp), bmp.Width, bmp.Height, R, G, B, posX, posY, width, height),
+                bmp.Width,
+                bmp.Height);
+        }
+
+        /// <summary>
+        /// bitmapデータに四角のポインタを描画します．
+        /// </summary>
+        /// <param name="bmp">bitmap</param>
+        /// <param name="color">ポインタの色</param>
+        /// <param name="pos">ポインタの座標</param>
+        /// <param name="size">ポインタのサイズ</param>
+        /// <returns>>四角のポイント描画画像</returns>
+        public static Bitmap PointSquare(Bitmap bmp, RGB color, Point pos, Size size)
+        {
+            return ByteArrayToBitmap(
+                PointSquare(BitmapToByteArray(bmp), bmp.Width, bmp.Height, color.R, color.G, color.B, pos.X, pos.Y, size.Width, size.Height),
+                bmp.Width,
+                bmp.Height);
+        }
+
+        //--------------------------------------------------------------------------------
+        // ボックスラインの描画処理関連
+        //--------------------------------------------------------------------------------
+        /// <summary>
+        /// byte配列のbitmapデータに四角のラインを描画します．
+        /// </summary>
+        /// <param name="rgbValues">byte配列のbitmap</param>
+        /// <param name="bmpWidth">Bitmapデータの幅</param>
+        /// <param name="bmpHeight">Bitmapデータの高さ</param>
+        /// <param name="R">ラインの色(R)</param>
+        /// <param name="G">ラインの色(G)</param>
+        /// <param name="B">ラインの色(B)</param>
+        /// <param name="posX">ラインの座標(X)</param>
+        /// <param name="posY">ラインの座標(Y)</param>
+        /// <param name="width">ラインの幅</param>
+        /// <param name="height">ラインの高さ</param>
+        /// <returns>四角のライン描画画像のbyte配列</returns>
+        public static byte[] DrawBox(byte[] rgbValues, int bmpWidth, int bmpHeight,
+            byte R, byte G, byte B, int posX, int posY, int width, int height)
+        {
+            int p;
+            int x, y;
+            int wWork = width / 2;
+            int hWork = height / 2;
+
+            byte[] ret = new byte[rgbValues.Length];
+            Array.Copy(rgbValues, ret, rgbValues.Length);
+
+            for(p = posX; p < width + posX; p++)
+            {
+                ret[4 * (bmpWidth * posY + p)] = ret[4 * (bmpWidth * (posY + height - 1) + p)] = B;
+                ret[4 * (bmpWidth * posY + p) + 1] = ret[4 * (bmpWidth * (posY + height - 1) + p) + 1] = G;
+                ret[4 * (bmpWidth * posY + p) + 2] = ret[4 * (bmpWidth * (posY + height - 1) + p) + 2] = R;
+            }
+
+            for(p = posY; p < height + posY; p++)
+            {
+                ret[4 * (bmpWidth * p + posX)] = ret[4 * (bmpWidth * p + posX + width - 1)] = B;
+                ret[4 * (bmpWidth * p + posX) + 1] = ret[4 * (bmpWidth * p + posX + width - 1) + 1] = G;
+                ret[4 * (bmpWidth * p + posX) + 2] = ret[4 * (bmpWidth * p + posX + width - 1) + 2] = R;
+            }
+
+            return ret;
+        }
+
+        /// <summary>
+        /// byte配列のbitmapデータに四角のラインを描画します．
+        /// </summary>
+        /// <param name="rgbValues">byte配列のbitmap</param>
+        /// <param name="bmpSize">Bitmapデータのサイズ</param>
+        /// <param name="color">ラインの色</param>
+        /// <param name="pos">ラインの座標</param>
+        /// <param name="size">ラインのサイズ</param>
+        /// <returns>>四角のライン描画画像のbyte配列</returns>
+        public static byte[] DrawBox(byte[] rgbValues, Size bmpSize, RGB color, Point pos, Size size)
+        {
+            return DrawBox(rgbValues, bmpSize.Width, bmpSize.Height, color.R, color.G, color.B, pos.X, pos.Y, size.Width, size.Height);
         }
 
         //--------------------------------------------------------------------------------
@@ -511,9 +620,34 @@ namespace MiYALAB.CSharp.Image
         public struct Label
         {
             /// <summary>
-            /// 座標
+            /// ラベルデータ構造
+            /// </summary>
+            /// <param name="_posUL">左上座標</param>
+            /// <param name="_posDR">右下座標</param>
+            /// <param name="_size">画像サイズ</param>
+            /// <param name="_area">面積</param>
+            /// <param name="_centroid">重心座標</param>
+            /// <param name="_rgbValues">bitmapのbyte配列</param>
+            /// <param name="_bmp">bitmap</param>
+            public Label(Point _posUL, Point _posDR, Size _size, int _area, Point _centroid, byte[] _rgbValues, Bitmap _bmp)
+            {
+                Pos = _posUL;
+                PosDR = _posDR;
+                Size = _size;
+                Area = _area;
+                Centroid = _centroid;
+                rgbValues = _rgbValues;
+                bmp = _bmp;
+            }
+
+            /// <summary>
+            /// 左上座標
             /// </summary>
             public Point Pos;
+            /// <summary>
+            /// 右下座標
+            /// </summary>
+            public Point PosDR;
             /// <summary>
             /// サイズ
             /// </summary>
@@ -523,7 +657,7 @@ namespace MiYALAB.CSharp.Image
             /// </summary>
             public int Area;
             /// <summary>
-            /// 重心
+            /// 重心座標
             /// </summary>
             public Point Centroid;
             /// <summary>
@@ -537,91 +671,268 @@ namespace MiYALAB.CSharp.Image
         }
 
         /// <summary>
-        /// ラベリング処理
+        /// ラベリング処理(ラスタスキャン方式)
         /// </summary>
         /// <param name="rgbValues">byte配列に変換された二値化bitmap</param>
         /// <param name="width">Bitmapデータの幅</param>
         /// <param name="height">Bitmapデータの高さ</param>
         /// <returns>ラベルデータ配列</returns>
-        public static byte[] Labeling(byte[] rgbValues, int width, int height)
+        public static Label[] Labeling(byte[] rgbValues, int width, int height)
         {
+            int x, y;
             int num = 1;
-            int[] labelNum = Enumerable.Repeat<int>(0, rgbValues.Length / 4).ToArray();
-            
-            // 各画素にラベルを単純割り当て
-            for(int y = 0; y < height; y++)
+            int[] labelNum = new int[rgbValues.Length / 4];
+            List<int> depth = new List<int>() { 0 };
+            byte[] _rgbValues = new byte[rgbValues.Length];
+            Array.Copy(rgbValues, _rgbValues, rgbValues.Length);
+
+            // 単純ラベル割り当て
+            int check;
+            int[] work = new int[9] { 65536, 65536, 65536, 65536, 65536, 65536, 65536, 65536, 65536 };
+            for (y = 0; y < height; y++)
             {
-                for(int x=0;x< width; x++)
+                for (x = 0; x < width; x++)
                 {
-                    if (rgbValues[4 * (width * y + x)] != 0)
+                    if (rgbValues[4 * (width * y + x)] == 255)
                     {
-                        int[] work = new int[4];
+                        work[0] = work[1] = work[2] = work[3] = 65536;
 
-                        // 注目画素右上
-                        if (labelNum[width * (y + 1) + x + 1] != 0 && x < width - 1 && 0 < y) 
-                            work[0] = labelNum[width * (y + 1) + x + 1];
-                        else work[0] = 65535;
                         // 注目画素左上
-                        if (labelNum[width * (y + 1) + x - 1] != 0 && 0 < x && 0 < y) 
-                            work[1] = labelNum[width * (y + 1) + x - 1];
-                        else work[1] = 65535;
-                        // 注目画素上
-                        if (labelNum[width * (y + 1) + x] != 0 && 0 < y) 
-                            work[2] = labelNum[width * (y + 1) + x + 1];
-                        else work[2] = 65535;
-                        // 注目画素左
-                        if (labelNum[width * y + x - 1] != 0 && 0 < x) 
-                            work[3] = labelNum[width * y + x - 1];
-                        else work[3] = 65535;
+                        if (0 < x && 0 < y && labelNum[width * (y - 1) + (x - 1)] != 0)
+                            work[0] = labelNum[width * (y - 1) + (x - 1)];
+                        
+                        // 注目画素右上
+                        if (x < width - 1 && 0 < y && labelNum[width * (y - 1) + (x + 1)] != 0)
+                            work[1] = labelNum[width * (y - 1) + (x + 1)];
 
-                        int min = work.Min();
-                        if(min == 65535)
+                        // 注目画素上
+                        if (0 < y && labelNum[width * (y - 1) + (x)] != 0)
+                            work[2] = labelNum[width * (y - 1) + (x)];
+
+                        // 注目画素左
+                        if (0 < x && labelNum[width * (y) + (x - 1)] != 0)
+                            work[3] = labelNum[width * (y) + (x - 1)];
+
+                        check = work.Min();
+
+                        // 新しいラベル番号割り当て
+                        if(check == 65536)
                         {
+                            depth.Add(num);
                             labelNum[width * y + x] = num;
+
                             num++;
                         }
+
+                        // 最小ラベル番号割り当て 最接近ラベルデータ更新
                         else
                         {
-                            labelNum[width * y + x] = min;
+                            labelNum[width * y + x] = check;
+
+                            if (work[0] != 65536)
+                            {
+                                depth[labelNum[width * (y - 1) + (x - 1)]] = Math.Min(check, depth[labelNum[width * (y - 1) + (x - 1)]]);
+                            }
+                            if (work[1] != 65536)
+                            {
+                                depth[labelNum[width * (y - 1) + (x + 1)]] = Math.Min(check, depth[labelNum[width * (y - 1) + (x + 1)]]);
+                            }
+                            if (work[2] != 65536)
+                            {
+                                depth[labelNum[width * (y - 1) + (x)]] = Math.Min(check, depth[labelNum[width * (y - 1) + (x)]]);
+                            }
+                            if (work[3] != 65536)
+                            {
+                                depth[labelNum[width * (y) + (x - 1)]] = Math.Min(check, depth[labelNum[width * (y) + (x - 1)]]);
+                            }
                         }
+
+                        // 黒色に変換
+                        _rgbValues[4 * (width * y + x)] = 0;
+                        _rgbValues[4 * (width * y + x) + 1] = 0;
+                        _rgbValues[4 * (width * y + x) + 2] = 0;
                     }
                 }
             }
 
-            // 各ラベルの連結画素探索
-            List<int> dst = Enumerable.Repeat<int>(0, num).ToList();
-            for (int y = 0; y < height; y++)
+            // 最接近ラベル修正
+            for(x = depth.Count - 1; 0 < x; x--)
             {
-                for (int x = width; 0 <= x; x--)
+                check = x;
+
+                while (check != depth[check])
+                {
+                    check = depth[check];
+                    depth[x] = check;
+                }
+            }
+
+            // 最接近ラベル再探索(2列間隔捜査)
+            for (y = 0; y < height; y += 2)
+            {
+                for (x = 0; x < width; x++)
                 {
                     if (labelNum[width * y + x] != 0)
                     {
-                        int[] work = new int[5];
+                        work[0] = work[1] = work[2] = work[3] = work[5] = work[6] = work[7] = work[8] = 65536;
+                        work[4] = depth[labelNum[width * y + x]];
+
+                        // 注目画素左上
+                        if (0 < x && 0 < y && labelNum[width * (y - 1) + (x - 1)] != 0)
+                            work[0] = depth[labelNum[width * (y - 1) + (x - 1)]];
+
+                        // 注目画素右上
+                        if (x < width - 1 && 0 < y && labelNum[width * (y - 1) + (x + 1)] != 0)
+                            work[1] = depth[labelNum[width * (y - 1) + (x + 1)]];
+
+                        // 注目画素上
+                        if (0 < y && labelNum[width * (y - 1) + (x)] != 0)
+                            work[2] = depth[labelNum[width * (y - 1) + (x)]];
+
+                        // 注目画素左
+                        if (0 < x && labelNum[width * (y) + (x - 1)] != 0)
+                            work[3] = depth[labelNum[width * (y) + (x - 1)]];
+
+                        // 注目画素左下
+                        if (0 < x && y < height - 1 && labelNum[width * (y + 1) + (x - 1)] != 0)
+                            work[5] = depth[labelNum[width * (y + 1) + (x - 1)]];
 
                         // 注目画素右下
-                        if (labelNum[width * (y - 1) + x + 1] != 0 && x < width - 1 && y < height - 1) 
-                            work[0] = labelNum[width * (y + 1) + x + 1];
-                        else work[0] = 65535;
-                        // 注目画素左下
-                        if (labelNum[width * (y - 1) + x - 1] != 0 && 0 < x && y < height - 1)
-                            work[1] = labelNum[width * (y + 1) + x - 1];
-                        else work[1] = 65535;
-                        // 注目画素
-                        if (labelNum[width * (y - 1) + x] != 0 && y < height - 1)
-                            work[2] = labelNum[width * (y + 1) + x + 1];
-                        else work[2] = 65535;
-                        // 注目画素右
-                        if (labelNum[width * y + x + 1] != 0 && x < width - 1)
-                            work[3] = labelNum[width * y + x - 1];
-                        else work[3] = 65535;
-                        work[4] = labelNum[width * y + x];
+                        if (x < width - 1 && y < height - 1 && labelNum[width * (y + 1) + (x + 1)] != 0)
+                            work[6] = depth[labelNum[width * (y + 1) + (x + 1)]];
 
-                        dst[labelNum[width * y + x]] = work.Min();
+                        // 注目画素下
+                        if (y < height - 1 && labelNum[width * (y + 1) + (x)] != 0)
+                            work[7] = depth[labelNum[width * (y + 1) + (x)]];
+
+                        // 注目画素右
+                        if (x < width - 1 && labelNum[width * (y) + (x + 1)] != 0)
+                            work[8] = depth[labelNum[width * (y) + (x + 1)]];
+
+                        check = work.Min();
+                        depth[labelNum[width * y + x]] = check;
+
+                        if (work[0] != 65536)
+                        {
+                            depth[labelNum[width * (y - 1) + (x - 1)]] = Math.Min(check, depth[labelNum[width * (y - 1) + (x - 1)]]);
+                        }
+                        if (work[1] != 65536)
+                        {
+                            depth[labelNum[width * (y - 1) + (x + 1)]] = Math.Min(check, depth[labelNum[width * (y - 1) + (x + 1)]]);
+                        }
+                        if (work[2] != 65536)
+                        {
+                            depth[labelNum[width * (y - 1) + (x)]] = Math.Min(check, depth[labelNum[width * (y - 1) + (x)]]);
+                        }
+                        if (work[3] != 65536)
+                        {
+                            depth[labelNum[width * (y) + (x - 1)]] = Math.Min(check, depth[labelNum[width * (y) + (x - 1)]]);
+                        }
+                        if (work[5] != 65536)
+                        {
+                            depth[labelNum[width * (y + 1) + (x - 1)]] = Math.Min(check, depth[labelNum[width * (y + 1) + (x - 1)]]);
+                        }
+                        if (work[6] != 65536)
+                        {
+                            depth[labelNum[width * (y + 1) + (x + 1)]] = Math.Min(check, depth[labelNum[width * (y + 1) + (x + 1)]]);
+                        }
+                        if (work[7] != 65536)
+                        {
+                            depth[labelNum[width * (y + 1) + (x)]] = Math.Min(check, depth[labelNum[width * (y + 1) + (x)]]);
+                        }
+                        if (work[8] != 65536)
+                        {
+                            depth[labelNum[width * (y) + (x + 1)]] = Math.Min(check, depth[labelNum[width * (y) + (x + 1)]]);
+                        }
                     }
                 }
             }
 
-            return rgbValues;
+            // 最接近ラベル修正
+            for (x = depth.Count - 1; 0 < x; x--)
+            {
+                check = x;
+
+                while (check != depth[check])
+                {
+                    check = depth[check];
+                    depth[x] = check;
+                }
+            }
+
+            // ラベルデータ数算出
+            IDictionary<int, int> listNum = new Dictionary<int, int>();
+            listNum.Add(0, 0);
+            for(x = 1; x < depth.Count; x++)
+            {
+                if(x == depth[x])
+                {
+                    listNum.Add(x, listNum.Count);
+                }
+            }
+
+            // ラベル初期化
+            Label init = new Label(
+                new Point(width, height),
+                new Point(0, 0),
+                new Size(0, 0),
+                0,
+                new Point(0, 0),
+                null,
+                null);
+            Label[] labels = Enumerable.Repeat<Label>(init, listNum.Count).ToArray();
+
+            // ラベルデータ配列のrgbValues初期化
+            for (x = 0; x < listNum.Count; x++)
+            {
+                labels[x].rgbValues = new byte[rgbValues.Length];
+                Array.Copy(rgbValues, labels[x].rgbValues, rgbValues.Length);
+            }
+
+            // ラベル番号再割り当て
+            for (y = 0; y < height; y++)
+            {
+                for (x = 0; x < width; x++)
+                {
+                    if (labelNum[width * y + x] != 0)
+                    {
+                        work[0] = labelNum[(width * y + x)] = depth[labelNum[(width * y + x)]];
+                        work[0] = listNum[work[0]];
+                        labels[work[0]].rgbValues[4 * (width * y + x)] = 255;
+                        labels[work[0]].rgbValues[4 * (width * y + x) + 1] = 255;
+                        labels[work[0]].rgbValues[4 * (width * y + x) + 2] = 255;
+                        labels[work[0]].Area += 1;
+                        labels[work[0]].Centroid.X += x;
+                        labels[work[0]].Centroid.Y += y;
+                        if (labels[work[0]].Pos.X > x) labels[work[0]].Pos.X = x;
+                        if (labels[work[0]].Pos.Y > y) labels[work[0]].Pos.Y = y;
+                        if (labels[work[0]].PosDR.X < x) labels[work[0]].PosDR.X = x;
+                        if (labels[work[0]].PosDR.Y < y) labels[work[0]].PosDR.Y = y;
+                    }
+                }
+            }
+
+            // ラベルのパラメータ計算
+            for(x = 1; x < listNum.Count; x++)
+            {
+                labels[x].Centroid.X /= labels[x].Area;
+                labels[x].Centroid.Y /= labels[x].Area;
+                labels[x].Size.Width = labels[x].PosDR.X - labels[x].Pos.X + 1;
+                labels[x].Size.Height = labels[x].PosDR.Y - labels[x].Pos.Y + 1;
+            }
+
+            return labels;
+        }
+
+        /// <summary>
+        /// ラベリング処理(ラスタスキャン方式)
+        /// </summary>
+        /// <param name="rgbValues">byte配列に変換された二値化bitmap</param>
+        /// <param name="size">bitmapデータのサイズ</param>
+        /// <returns></returns>
+        public static Label[] Labeling(byte[] rgbValues, Size size)
+        {
+            return Labeling(rgbValues, size.Width, size.Height);
         }
     }
 }

@@ -120,13 +120,14 @@ namespace MiYALAB.CSharp.Image
         /// <returns>フィルタ後の画像のbyte配列</returns>
         public static byte[] Filter(byte[] rgbValues, int width, int height, double[,] kernel, double weight)
         {
+            int x, y;
+            double work;
             byte[] ret = (byte[])rgbValues.Clone();
 
-            for (int y = 1; y < height - 1; y++)
+            for (y = 1; y < height - 1; y++)
             {
-                for (int x = 1; x < width - 1; x++)
+                for (x = 1; x < width - 1; x++)
                 {
-                    double work;
                     work =
                           rgbValues[4 * (width * (y - 1) + (x - 1))] * kernel[0, 0]
                         + rgbValues[4 * (width * (y) + (x - 1))] * kernel[0, 1]
@@ -160,13 +161,14 @@ namespace MiYALAB.CSharp.Image
         /// <returns>フィルタ後の画像のbyte配列</returns> 
         public static byte[] Filter(byte[] rgbValues, int width, int height, int[,] kernel, double weight)
         {
+            int x, y;
+            int work;
             byte[] ret = (byte[])rgbValues.Clone();
 
-            for (int y = 1; y < height - 1; y++)
+            for (y = 1; y < height - 1; y++)
             {
-                for (int x = 1; x < width - 1; x++)
+                for (x = 1; x < width - 1; x++)
                 {
-                    double work;
                     work =
                           rgbValues[4 * (width * (y - 1) + (x - 1))] * kernel[0, 0]
                         + rgbValues[4 * (width * (y) + (x - 1))] * kernel[0, 1]
@@ -178,7 +180,7 @@ namespace MiYALAB.CSharp.Image
                         + rgbValues[4 * (width * (y) + (x + 1))] * kernel[2, 1]
                         + rgbValues[4 * (width * (y + 1) + (x + 1))] * kernel[2, 2];
 
-                    work *= weight;
+                    work = (int)(work * weight);
 
                     ret[4 * (width * y + x)] =
                             ret[4 * (width * y + x) + 1] =
@@ -199,13 +201,14 @@ namespace MiYALAB.CSharp.Image
         /// <returns>Prewittフィルタ後の画像のbyte配列</returns>
         public static byte[] FilterPrewitt(byte[] rgbValues, int width, int height, double weight)
         {
+            int x, y;
+            int workX, workY;
             byte[] ret = (byte[])rgbValues.Clone();
 
-            for (int y = 1; y < height - 1; y++)
+            for (y = 1; y < height - 1; y++)
             {
-                for (int x = 1; x < width - 1; x++)
+                for (x = 1; x < width - 1; x++)
                 {
-                    double workX, workY;
                     workX =
                           rgbValues[4 * (width * (y - 1) + (x - 1))] * FILTER_KERNEL.PrewittX[0, 0]
                         + rgbValues[4 * (width * (y) + (x - 1))] * FILTER_KERNEL.PrewittX[0, 1]
@@ -222,7 +225,7 @@ namespace MiYALAB.CSharp.Image
                         + rgbValues[4 * (width * (y + 1) + (x + 1))] * FILTER_KERNEL.PrewittY[2, 2];
 
                     workX = (Math.Abs(workX) + Math.Abs(workY));
-                    workX *= weight;
+                    workX = (int)(workX * weight);
 
                     ret[4 * (width * y + x)] =
                             ret[4 * (width * y + x) + 1] =
@@ -231,6 +234,18 @@ namespace MiYALAB.CSharp.Image
             }
 
             return ret;
+        }
+
+        /// <summary>
+        /// byte配列のグレースケールBitmapデータのPrewittフィルタ処理を行います．
+        /// </summary>
+        /// <param name="rgbValues">byte配列のグレースケールBitmapデータ</param>
+        /// <param name="size">Bitmapデータのサイズ</param>
+        /// <param name="weight">計算重み</param>
+        /// <returns>Prewittフィルタ後の画像のbyte配列</returns>
+        public static byte[] FilterPrewitt(byte[] rgbValues, Size size, double weight)
+        {
+            return FilterPrewitt(rgbValues, size.Width, size.Height, weight);
         }
 
         /// <summary>
@@ -243,13 +258,14 @@ namespace MiYALAB.CSharp.Image
         /// <returns>Sobelフィルタ後の画像のbyte配列</returns>
         public static byte[] FilterSobel(byte[] rgbValues, int width, int height, double weight)
         {
+            int x, y;
+            int workX, workY;
             byte[] ret = (byte[])rgbValues.Clone();
 
-            for (int y = 1; y < height - 1; y++)
+            for (y = 1; y < height - 1; y++)
             {
-                for (int x = 1; x < width - 1; x++)
+                for (x = 1; x < width - 1; x++)
                 {
-                    double workX, workY;
                     workX =
                           rgbValues[4 * (width * (y - 1) + (x - 1))] * FILTER_KERNEL.SobelX[0, 0]
                         + rgbValues[4 * (width * (y) + (x - 1))] * FILTER_KERNEL.SobelX[0, 1]
@@ -266,15 +282,27 @@ namespace MiYALAB.CSharp.Image
                         + rgbValues[4 * (width * (y + 1) + (x + 1))] * FILTER_KERNEL.SobelY[2, 2];
 
                     workX = (Math.Abs(workX) + Math.Abs(workY));
-                    workX *= weight;
+                    workX = (int)(workX * weight);
 
                     ret[4 * (width * y + x)] =
                             ret[4 * (width * y + x) + 1] =
                             ret[4 * (width * y + x) + 2] = (byte)workX;
                 }
             }
-            
+
             return ret;
+        }
+
+        /// <summary>
+        /// byte配列のグレースケールBitmapデータのSobelフィルタ処理を行います．
+        /// </summary>
+        /// <param name="rgbValues">byte配列のグレースケールBitmapデータ</param>
+        /// <param name="size">Bitmapデータのサイズ</param>
+        /// <param name="weight">計算重み</param>
+        /// <returns>Sobelフィルタ後の画像のbyte配列</returns>
+        public static byte[] FilterSobel(byte[] rgbValues, Size size, double weight)
+        {
+            return FilterSobel(rgbValues, size.Width, size.Height, weight);
         }
 
     }

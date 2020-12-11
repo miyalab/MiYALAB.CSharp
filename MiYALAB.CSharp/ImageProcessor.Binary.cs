@@ -47,21 +47,24 @@ namespace MiYALAB.CSharp.Image
         /// <param name="gThreshold">最大緑色閾値</param>
         /// <param name="bThreshold">最大青色閾値</param>
         /// <returns>二値化画像のbyte配列(白：閾値内, 黒：閾値外)</returns>
-        public static byte[] BinaryConverter(byte[] rgbValues, int rThreshold, int gThreshold, int bThreshold)
+        public static byte[] BinaryNotConverter(byte[] rgbValues, int rThreshold, int gThreshold, int bThreshold)
         {
+            byte[] ret = new byte[rgbValues.Length];
+
             for (int i = 0; i < rgbValues.Length; i += 4)
             {
                 if (rgbValues[i] <= bThreshold && rgbValues[i + 1] <= gThreshold && rgbValues[i + 2] <= rThreshold)
                 {
-                    rgbValues[i] = rgbValues[i + 1] = rgbValues[i + 2] = 255;
+                    ret[i] = ret[i + 1] = ret[i + 2] = 255;
                 }
                 else
                 {
-                    rgbValues[i] = rgbValues[i + 1] = rgbValues[i + 2] = 0;
+                    ret[i] = ret[i + 1] = ret[i + 2] = 0;
                 }
+                ret[i + 3] = 255;
             }
 
-            return rgbValues;
+            return ret;
         }
 
         /// <summary>
@@ -75,24 +78,26 @@ namespace MiYALAB.CSharp.Image
         /// <param name="gThresholdMin">最小緑色閾値</param>
         /// <param name="bThresholdMin">最小青色閾値</param>
         /// <returns>二値化画像のbyte配列(白：閾値内, 黒：閾値外)</returns>
-        public static byte[] BinaryConverter(byte[] rgbValues, int rThresholdMax, int gThresholdMax, int bThresholdMax, int rThresholdMin, int gThresholdMin, int bThresholdMin)
+        public static byte[] BinaryNotConverter(byte[] rgbValues, int rThresholdMax, int gThresholdMax, int bThresholdMax, int rThresholdMin, int gThresholdMin, int bThresholdMin)
         {
+            byte[] ret = new byte[rgbValues.Length];
+
             for (int i = 0; i < rgbValues.Length; i += 4)
             {
                 if (bThresholdMin <= rgbValues[i] && rgbValues[i] <= bThresholdMax &&
                     gThresholdMin <= rgbValues[i + 1] && rgbValues[i + 1] <= gThresholdMax &&
                     rThresholdMin <= rgbValues[i + 2] && rgbValues[i + 2] <= rThresholdMax)
                 {
-                    rgbValues[i] = rgbValues[i + 1] = rgbValues[i + 2] = 255;
+                    ret[i] = ret[i + 1] = ret[i + 2] = 255;
                 }
                 else
                 {
-                    rgbValues[i] = rgbValues[i + 1] = rgbValues[i + 2] = 0;
+                    ret[i] = ret[i + 1] = ret[i + 2] = 0;
                 }
+                ret[i + 3] = 255;
             }
 
-
-            return rgbValues;
+            return ret;
         }
 
         /// <summary>
@@ -102,7 +107,7 @@ namespace MiYALAB.CSharp.Image
         /// <param name="thresholdMax">最大閾値</param>
         /// <param name="thresholdMin">最小閾値</param>
         /// <returns>二値化画像のbyte配列(白：閾値内, 黒：閾値外)</returns>
-        public static byte[] BinaryConverter(byte[] rgbValues, RGB thresholdMax, RGB thresholdMin)
+        public static byte[] BinaryNotConverter(byte[] rgbValues, RGB thresholdMax, RGB thresholdMin)
         {
             return BinaryConverter(rgbValues, thresholdMax.R, thresholdMax.G, thresholdMax.B, thresholdMin.R, thresholdMin.G, thresholdMin.B);
         }
@@ -113,7 +118,7 @@ namespace MiYALAB.CSharp.Image
         /// <param name="rgbValues">byte配列に変換されたbitmap</param>
         /// <param name="thresholdMax">最大閾値</param>
         /// <returns>二値化画像のbyte配列(白：閾値内, 黒：閾値外)</returns>
-        public static byte[] BinaryConverter(byte[] rgbValues, RGB thresholdMax)
+        public static byte[] BinaryNotConverter(byte[] rgbValues, RGB thresholdMax)
         {
             return BinaryConverter(rgbValues, thresholdMax.R, thresholdMax.G, thresholdMax.B);
         }
@@ -124,7 +129,7 @@ namespace MiYALAB.CSharp.Image
         /// <param name="rgbValues">byte配列に変換されたbitmap</param>
         /// <param name="ThresholdMax">最大閾値</param>
         /// <returns>二値化画像のbyte配列(白：閾値内, 黒：閾値外)</returns>
-        public static byte[] BinaryConverter(byte[] rgbValues, int ThresholdMax)
+        public static byte[] BinaryNotConverter(byte[] rgbValues, int ThresholdMax)
         {
             return BinaryConverter(rgbValues, ThresholdMax, ThresholdMax, ThresholdMax);
         }
@@ -137,7 +142,7 @@ namespace MiYALAB.CSharp.Image
         /// <param name="gThreshold">緑色閾値</param>
         /// <param name="bThreshold">青色閾値</param>
         /// <returns>二値化画像(白：閾値内, 黒：閾値外)</returns>
-        public static Bitmap BinaryConverter(Bitmap bmp, int rThreshold, int gThreshold, int bThreshold)
+        public static Bitmap BinaryNotConverter(Bitmap bmp, int rThreshold, int gThreshold, int bThreshold)
         {
             return ByteArrayToBitmap(
                 BinaryConverter(BitmapToByteArray(bmp), rThreshold, gThreshold, bThreshold),
@@ -156,7 +161,7 @@ namespace MiYALAB.CSharp.Image
         /// <param name="gThresholdMin">最小緑色閾値</param>
         /// <param name="bThresholdMin">最小青色閾値</param>
         /// <returns>二値化画像のbyte配列(白：閾値内, 黒：閾値外)</returns>
-        public static Bitmap BinaryConverter(Bitmap bmp, int rThresholdMax, int gThresholdMax, int bThresholdMax, int rThresholdMin, int gThresholdMin, int bThresholdMin)
+        public static Bitmap BinaryNotConverter(Bitmap bmp, int rThresholdMax, int gThresholdMax, int bThresholdMax, int rThresholdMin, int gThresholdMin, int bThresholdMin)
         {
             return ByteArrayToBitmap(
                 BinaryConverter(BitmapToByteArray(bmp), rThresholdMax, gThresholdMax, bThresholdMax, rThresholdMin, gThresholdMin, bThresholdMin),
@@ -171,7 +176,7 @@ namespace MiYALAB.CSharp.Image
         /// <param name="thresholdMax">最大閾値</param>
         /// <param name="thresholdMin">最小閾値</param>
         /// <returns>二値化画像(白：閾値内, 黒：閾値外)</returns>
-        public static Bitmap BinaryConverter(Bitmap bmp, RGB thresholdMax, RGB thresholdMin)
+        public static Bitmap BinaryNotConverter(Bitmap bmp, RGB thresholdMax, RGB thresholdMin)
         {
             return ByteArrayToBitmap(BinaryConverter(
                 BitmapToByteArray(bmp),
@@ -187,7 +192,7 @@ namespace MiYALAB.CSharp.Image
         /// <param name="bmp">bitmap</param>
         /// <param name="thresholdMax">最大閾値</param>
         /// <returns>二値化画像(白：閾値内, 黒：閾値外)</returns>
-        public static Bitmap BinaryConverter(Bitmap bmp, RGB thresholdMax)
+        public static Bitmap BinaryNotConverter(Bitmap bmp, RGB thresholdMax)
         {
             return ByteArrayToBitmap(BinaryConverter(
                 BitmapToByteArray(bmp),
@@ -202,7 +207,7 @@ namespace MiYALAB.CSharp.Image
         /// <param name="bmp">bitmap</param>
         /// <param name="ThresholdMax">最大閾値</param>
         /// <returns>二値化画像(白：閾値内, 黒：閾値外)</returns>
-        public static Bitmap BinaryConverter(Bitmap bmp, int ThresholdMax)
+        public static Bitmap BinaryNotConverter(Bitmap bmp, int ThresholdMax)
         {
             return ByteArrayToBitmap(
                 BinaryConverter(BitmapToByteArray(bmp), ThresholdMax, ThresholdMax, ThresholdMax),
@@ -218,21 +223,24 @@ namespace MiYALAB.CSharp.Image
         /// <param name="gThreshold">最大緑色閾値</param>
         /// <param name="bThreshold">最大青色閾値</param>
         /// <returns>二値化画像のbyte配列(白：閾値外, 黒：閾値内)</returns>
-        public static byte[] BinaryNotConverter(byte[] rgbValues, int rThreshold, int gThreshold, int bThreshold)
+        public static byte[] BinaryConverter(byte[] rgbValues, int rThreshold, int gThreshold, int bThreshold)
         {
+            byte[] ret = new byte[rgbValues.Length];
+            
             for (int i = 0; i < rgbValues.Length; i += 4)
             {
                 if (rgbValues[i] <= bThreshold && rgbValues[i + 1] <= gThreshold && rgbValues[i + 2] <= rThreshold)
                 {
-                    rgbValues[i] = rgbValues[i + 1] = rgbValues[i + 2] = 0;
+                    ret[i] = ret[i + 1] = ret[i + 2] = 0;
                 }
                 else
                 {
-                    rgbValues[i] = rgbValues[i + 1] = rgbValues[i + 2] = 255;
+                    ret[i] = ret[i + 1] = ret[i + 2] = 255;
                 }
+                ret[i + 3] = 255;
             }
 
-            return rgbValues;
+            return ret;
         }
 
         /// <summary>
@@ -246,22 +254,24 @@ namespace MiYALAB.CSharp.Image
         /// <param name="gThresholdMin">最小緑色閾値</param>
         /// <param name="bThresholdMin">最小青色閾値</param>
         /// <returns>二値化画像のbyte配列(白：閾値外, 黒：閾値内)</returns>
-        public static byte[] BinaryNotConverter(byte[] rgbValues, int rThresholdMax, int gThresholdMax, int bThresholdMax, int rThresholdMin, int gThresholdMin, int bThresholdMin)
+        public static byte[] BinaryConverter(byte[] rgbValues, int rThresholdMax, int gThresholdMax, int bThresholdMax, int rThresholdMin, int gThresholdMin, int bThresholdMin)
         {
+            byte[] ret = new byte[rgbValues.Length];
+
             for (int i = 0; i < rgbValues.Length; i += 4)
             {
                 if (bThresholdMin <= rgbValues[i] && rgbValues[i] <= bThresholdMax &&
                     gThresholdMin <= rgbValues[i + 1] && rgbValues[i + 1] <= gThresholdMax &&
                     rThresholdMin <= rgbValues[i + 2] && rgbValues[i + 2] <= rThresholdMax)
                 {
-                    rgbValues[i] = rgbValues[i + 1] = rgbValues[i + 2] = 0;
+                    ret[i] = ret[i + 1] = ret[i + 2] = 0;
                 }
                 else
                 {
-                    rgbValues[i] = rgbValues[i + 1] = rgbValues[i + 2] = 255;
+                    ret[i] = ret[i + 1] = ret[i + 2] = 255;
                 }
+                ret[i + 3] = 255;
             }
-
 
             return rgbValues;
         }
@@ -273,7 +283,7 @@ namespace MiYALAB.CSharp.Image
         /// <param name="thresholdMax">最大閾値</param>
         /// <param name="thresholdMin">最小閾値</param>
         /// <returns>二値化画像のbyte配列(白：閾値外, 黒：閾値内)</returns>
-        public static byte[] BinaryNotConverter(byte[] rgbValues, RGB thresholdMax, RGB thresholdMin)
+        public static byte[] BinaryConverter(byte[] rgbValues, RGB thresholdMax, RGB thresholdMin)
         {
             return BinaryNotConverter(rgbValues, thresholdMax.R, thresholdMax.G, thresholdMax.B, thresholdMin.R, thresholdMin.G, thresholdMin.B);
         }
@@ -284,7 +294,7 @@ namespace MiYALAB.CSharp.Image
         /// <param name="rgbValues">byte配列に変換されたbitmap</param>
         /// <param name="thresholdMax">最大閾値</param>
         /// <returns>二値化画像のbyte配列(白：閾値外, 黒：閾値内)</returns>
-        public static byte[] BinaryNotConverter(byte[] rgbValues, RGB thresholdMax)
+        public static byte[] BinaryConverter(byte[] rgbValues, RGB thresholdMax)
         {
             return BinaryNotConverter(rgbValues, thresholdMax.R, thresholdMax.G, thresholdMax.B);
         }
@@ -295,7 +305,7 @@ namespace MiYALAB.CSharp.Image
         /// <param name="rgbValues">byte配列に変換されたbitmap</param>
         /// <param name="ThresholdMax">最大閾値</param>
         /// <returns>二値化画像のbyte配列(白：閾値外, 黒：閾値内)</returns>
-        public static byte[] BinaryNotConverter(byte[] rgbValues, int ThresholdMax)
+        public static byte[] BinaryConverter(byte[] rgbValues, int ThresholdMax)
         {
             return BinaryNotConverter(rgbValues, ThresholdMax, ThresholdMax, ThresholdMax);
         }
@@ -308,7 +318,7 @@ namespace MiYALAB.CSharp.Image
         /// <param name="gThreshold">緑色閾値</param>
         /// <param name="bThreshold">青色閾値</param>
         /// <returns>二値化画像(白：閾値外, 黒：閾値内)</returns>
-        public static Bitmap BinaryNotConverter(Bitmap bmp, int rThreshold, int gThreshold, int bThreshold)
+        public static Bitmap BinaryConverter(Bitmap bmp, int rThreshold, int gThreshold, int bThreshold)
         {
             return ByteArrayToBitmap(
                 BinaryNotConverter(BitmapToByteArray(bmp), rThreshold, gThreshold, bThreshold),
@@ -327,7 +337,7 @@ namespace MiYALAB.CSharp.Image
         /// <param name="gThresholdMin">最小緑色閾値</param>
         /// <param name="bThresholdMin">最小青色閾値</param>
         /// <returns>二値化画像のbyte配列(白：閾値外, 黒：閾値内)</returns>
-        public static Bitmap BinaryNotConverter(Bitmap bmp, int rThresholdMax, int gThresholdMax, int bThresholdMax, int rThresholdMin, int gThresholdMin, int bThresholdMin)
+        public static Bitmap BinaryConverter(Bitmap bmp, int rThresholdMax, int gThresholdMax, int bThresholdMax, int rThresholdMin, int gThresholdMin, int bThresholdMin)
         {
             return ByteArrayToBitmap(
                 BinaryNotConverter(BitmapToByteArray(bmp),
@@ -344,7 +354,7 @@ namespace MiYALAB.CSharp.Image
         /// <param name="thresholdMax">最大閾値</param>
         /// <param name="thresholdMin">最小閾値</param>
         /// <returns>二値化画像(白：閾値外, 黒：閾値内)</returns>
-        public static Bitmap BinaryNotConverter(Bitmap bmp, RGB thresholdMax, RGB thresholdMin)
+        public static Bitmap BinaryConverter(Bitmap bmp, RGB thresholdMax, RGB thresholdMin)
         {
             return ByteArrayToBitmap(
                 BinaryNotConverter(BitmapToByteArray(bmp),
@@ -360,7 +370,7 @@ namespace MiYALAB.CSharp.Image
         /// <param name="bmp">bitmap</param>
         /// <param name="thresholdMax">最大閾値</param>
         /// <returns>二値化画像(白：閾値外, 黒：閾値内)</returns>
-        public static Bitmap BinaryNotConverter(Bitmap bmp, RGB thresholdMax)
+        public static Bitmap BinaryConverter(Bitmap bmp, RGB thresholdMax)
         {
             return ByteArrayToBitmap(
                 BinaryNotConverter(BitmapToByteArray(bmp),
@@ -375,7 +385,7 @@ namespace MiYALAB.CSharp.Image
         /// <param name="bmp">bitmap</param>
         /// <param name="ThresholdMax">最大閾値</param>
         /// <returns>二値化画像(白：閾値外, 黒：閾値内)</returns>
-        public static Bitmap BinaryNotConverter(Bitmap bmp, int ThresholdMax)
+        public static Bitmap BinaryConverter(Bitmap bmp, int ThresholdMax)
         {
             return ByteArrayToBitmap(
                 BinaryNotConverter(BitmapToByteArray(bmp), ThresholdMax, ThresholdMax, ThresholdMax),
@@ -398,6 +408,7 @@ namespace MiYALAB.CSharp.Image
             {
                 if (rgbValues[i] != 0) Area++;
             }
+
             return Area;
         }
 
@@ -448,13 +459,14 @@ namespace MiYALAB.CSharp.Image
         /// <returns>黒色重心座標</returns>
         public static Point BlackCentroid(byte[] rgbValues, int width, int height)
         {
+            int x, y;
             int Area = 0;
             int dx = 0;
             int dy = 0;
 
-            for (int y = 0; y < height; y++)
+            for (y = 0; y < height; y++)
             {
-                for (int x = 0; x < width; x++)
+                for (x = 0; x < width; x++)
                 {
                     if (rgbValues[4 * (width * y + x)] == 0)
                     {
@@ -464,6 +476,7 @@ namespace MiYALAB.CSharp.Image
                     }
                 }
             }
+
             if (Area == 0) return new Point(0, 0);
             return new Point(dx / Area, dy / Area);
         }
@@ -498,13 +511,14 @@ namespace MiYALAB.CSharp.Image
         /// <returns>白色重心座標</returns>
         public static Point WhiteCentroid(byte[] rgbValues, int width, int height)
         {
+            int x, y;
             int Area = 0;
             int dx = 0;
             int dy = 0;
 
-            for (int y = 0; y < height; y++)
+            for (y = 0; y < height; y++)
             {
-                for (int x = 0; x < width; x++)
+                for (x = 0; x < width; x++)
                 {
                     if (rgbValues[4 * (width * y + x)] == 255)
                     {
@@ -551,11 +565,13 @@ namespace MiYALAB.CSharp.Image
         /// <returns>白色収縮画像のbyte配列</returns>
         public static byte[] Erode(byte[] rgbValues, int width, int height)
         {
-            byte[] ret = (byte[])rgbValues.Clone();
+            int x, y;
+            byte[] ret = new byte[rgbValues.Length];
+            Array.Copy(rgbValues, ret, rgbValues.Length);
 
-            for (int y = 0; y < height; y++)
+            for (y = 0; y < height; y++)
             {
-                for (int x = 0; x < width; x++)
+                for (x = 0; x < width; x++)
                 {
                     if (rgbValues[4 * (width * y + x)] == 0)
                     {
@@ -612,8 +628,32 @@ namespace MiYALAB.CSharp.Image
         /// <returns>白色収縮画像のbyte配列</returns>
         public static byte[] Erode(byte[] rgbValues, int width, int height, int border)
         {
-            for (int i = 0; i < border; i++) rgbValues = Erode(rgbValues, width, height);
-            return rgbValues;
+            int x, y, lx, ly;
+            byte[] ret = new byte[rgbValues.Length];
+            Array.Copy(rgbValues, ret, rgbValues.Length);
+
+            for (y = 0; y < height; y++)
+            {
+                for (x = 0; x < width; x++)
+                {
+                    if (rgbValues[4 * (width * y + x)] == 0)
+                    {
+                        for (ly = y - border; ly <= y + border; ly++)
+                        {
+                            if (ly < 0 || height - 1 < ly) continue;
+                            for (lx = x - border; lx <= x + border; lx++)
+                            {
+                                if (lx < 0 || width - 1 < lx) continue;
+                                    ret[4 * (width * ly + lx)] = 
+                                    ret[4 * (width * ly + lx) + 1] = 
+                                    ret[4 * (width * ly + lx) + 2] = 0;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return ret;
         }
 
         /// <summary>
@@ -625,8 +665,7 @@ namespace MiYALAB.CSharp.Image
         /// <returns>白色収縮画像のbyte配列</returns>
         public static byte[] Erode(byte[] rgbValues, Size size, int border)
         {
-            for (int i = 0; i < border; i++) rgbValues = Erode(rgbValues, size.Width, size.Height);
-            return rgbValues;
+            return Erode(rgbValues, size.Width, size.Height, border);
         }
 
         /// <summary>
@@ -668,11 +707,13 @@ namespace MiYALAB.CSharp.Image
         /// <returns>白色膨張画像のbyte配列</returns>
         public static byte[] Dilate(byte[] rgbValues, int width, int height)
         {
-            byte[] ret = (byte[])rgbValues.Clone();
+            int x, y;
+            byte[] ret = new byte[rgbValues.Length];
+            Array.Copy(rgbValues, ret, rgbValues.Length);
 
-            for (int y = 0; y < height; y++)
+            for (y = 0; y < height; y++)
             {
-                for (int x = 0; x < width; x++)
+                for (x = 0; x < width; x++)
                 {
                     if (rgbValues[4 * (width * y + x)] == 255)
                     {
@@ -729,8 +770,32 @@ namespace MiYALAB.CSharp.Image
         /// <returns>白色膨張画像のbyte配列</returns>
         public static byte[] Dilate(byte[] rgbValues, int width, int height, int border)
         {
-            for (int i = 0; i < border; i++) rgbValues = Dilate(rgbValues, width, height);
-            return rgbValues;
+            int x, y, lx, ly;
+            byte[] ret = new byte[rgbValues.Length];
+            Array.Copy(rgbValues, ret, rgbValues.Length);
+
+            for (y = 0; y < height; y++)
+            {
+                for (x = 0; x < width; x++)
+                {
+                    if (rgbValues[4 * (width * y + x)] == 255)
+                    {
+                        for(ly = y - border; ly <= y + border; ly++)
+                        {
+                            if (ly < 0 || height - 1 < ly) continue;
+                            for(lx = x - border; lx <= x + border; lx++)
+                            {
+                                if (lx < 0 || width - 1 < lx) continue;
+                                ret[4 * (width * ly + lx)] = 
+                                    ret[4 * (width * ly + lx)+1] = 
+                                    ret[4 * (width * ly + lx)+2] = 255;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return ret;
         }
 
         /// <summary>
@@ -742,8 +807,7 @@ namespace MiYALAB.CSharp.Image
         /// <returns>白色膨張画像のbyte配列</returns>
         public static byte[] Dilate(byte[] rgbValues, Size size, int border)
         {
-            for (int i = 0; i < border; i++) rgbValues = Dilate(rgbValues, size.Width, size.Height);
-            return rgbValues;
+            return Dilate(rgbValues, size.Width, size.Height, border);
         }
 
         /// <summary>

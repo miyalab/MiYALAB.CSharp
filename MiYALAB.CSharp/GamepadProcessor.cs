@@ -23,10 +23,6 @@
 */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 
 namespace MiYALAB.CSharp
@@ -102,7 +98,7 @@ namespace MiYALAB.CSharp
                 /// </summary>
                 /// <param name="uJoyID"></param>
                 /// <param name="pji"></param>
-                /// <returns>0：接続, otherwise：未接続</returns>
+                /// <returns>0：接続, otherwise：エラー</returns>
                 [DllImport("winmm.dll")]
                 public static extern int joyGetPosEx(int uJoyID, ref JOYINFOEX pji);
 
