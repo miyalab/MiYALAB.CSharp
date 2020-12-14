@@ -1,9 +1,35 @@
-﻿using System;
+﻿/*
+ * MIT License
+ * 
+ * Copyright (c) 2020 MiYA LAB(K.Miyauchi)
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+*/
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
+using System.IO;
+using System.Drawing.Imaging;
 
 namespace MiYALAB.CSharp.Monitor
 {
@@ -68,6 +94,8 @@ namespace MiYALAB.CSharp.Monitor
             this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pictureBox.TabIndex = 0;
             this.pictureBox.TabStop = false;
+            this.pictureBox.SizeChanged += new System.EventHandler(this.pictureBox_SizeChanged);
+            this.pictureBox.Click += new System.EventHandler(this.pictureBox_Click);
             // 
             // GraphicMonitor
             // 
@@ -84,6 +112,43 @@ namespace MiYALAB.CSharp.Monitor
 
         }
 
+        //----------------------------------------------------------------------------------
+        // 以下、イベント処理
+        //----------------------------------------------------------------------------------
+        /// <summary>
+        /// pictureBoxのサイズが変更時イベント
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void pictureBox_SizeChanged(object sender, EventArgs e)
+        {
+            this.ClientSize = new System.Drawing.Size(pictureBox.Width + 24, pictureBox.Height + 24);
+        }
+
+        /// <summary>
+        /// PictureBoxクリックイベント
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void pictureBox_Click(object sender, EventArgs e)
+        {
+            // フォルダ作成
+            if (!Directory.Exists(this.Text))
+            {
+                Directory.CreateDirectory(this.Text);
+            }
+
+            DateTime dt = DateTime.Now;
+            string fileName = this.Text + "/"
+                + dt.Year.ToString() + dt.Month.ToString() + dt.Day.ToString()
+                + dt.Hour.ToString() + dt.Minute.ToString() + dt.Second.ToString() + ".jpg";
+
+            pictureBox.Image.Save(fileName, ImageFormat.Jpeg);
+        }
+
+        //----------------------------------------------------------------------------------
+        // 以下、自作関数（イベント処理ではない）
+        //----------------------------------------------------------------------------------
         /// <summary>
         /// モニタのサイズを変更します．
         /// </summary>
@@ -119,7 +184,7 @@ namespace MiYALAB.CSharp.Monitor
         /// <param name="bmp">描画画像</param>
         public void DrawGraphic(Bitmap bmp)
         {
-            this.Location = new Point(bmp.Width + 24, bmp.Height + 24);
+            this.ClientSize = new System.Drawing.Size(bmp.Width + 24, bmp.Height + 24);
             pictureBox.Image = bmp;
         }
 
