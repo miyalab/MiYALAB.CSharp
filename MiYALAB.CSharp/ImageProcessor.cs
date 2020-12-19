@@ -28,11 +28,151 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 
 namespace MiYALAB.CSharp.Image
 {
+    //--------------------------------------------------------------------------------
+    // 画像処理用構造体
+    //--------------------------------------------------------------------------------
+    /// <summary>
+    /// 輝度データ
+    /// </summary>
+    public struct RGB
+    {
+        /// <summary>
+        /// 輝度データ
+        /// </summary>
+        /// <param name="_R"></param>
+        /// <param name="_G"></param>
+        /// <param name="_B"></param>
+        public RGB(byte _R, byte _G, byte _B)
+        {
+            R = _R;
+            G = _G;
+            B = _B;
+        }
+        /// <summary>
+        /// 輝度データ
+        /// </summary>
+        /// <param name="_R"></param>
+        /// <param name="_G"></param>
+        /// <param name="_B"></param>
+        public RGB(int _R, int _G, int _B)
+        {
+            R = (byte)_R;
+            G = (byte)_G;
+            B = (byte)_B;
+        }
+        /// <summary>
+        /// 輝度
+        /// </summary>
+        public byte R, G, B;
+    }
+
+    /// <summary>
+    /// 座標データ
+    /// </summary>
+    public struct Point
+    {
+        /// <summary>
+        /// 座標データ
+        /// </summary>
+        /// <param name="_x"></param>
+        /// <param name="_y"></param>
+        public Point(int _x, int _y)
+        {
+            X = _x;
+            Y = _y;
+        }
+
+        /// <summary>
+        /// 座標
+        /// </summary>
+        public int X, Y;
+    }
+
+    /// <summary>
+    /// 画像サイズデータ
+    /// </summary>
+    public struct Size
+    {
+        /// <summary>
+        /// 画像サイズデータ
+        /// </summary>
+        /// <param name="_width"></param>
+        /// <param name="_height"></param>
+        public Size(int _width, int _height)
+        {
+            Width = _width;
+            Height = _height;
+        }
+        /// <summary>
+        /// サイズ
+        /// </summary>
+        public int Width, Height;
+    }
+
+    /// <summary>
+    /// 色の輝度データ
+    /// </summary>
+    public struct Color
+    {
+        /// <summary>
+        /// 黒色(0, 0, 0)
+        /// </summary>
+        public static readonly RGB Black = new RGB(0, 0, 0);
+        /// <summary>
+        /// 白色(255, 255, 255)
+        /// </summary>
+        public static readonly RGB White = new RGB(255, 255, 255);
+        /// <summary>
+        /// 赤色(255, 0, 0)
+        /// </summary>
+        public static readonly RGB Red = new RGB(255, 0, 0);
+        /// <summary>
+        /// 緑色(0, 255, 0)
+        /// </summary>
+        public static readonly RGB Green = new RGB(0, 255, 0);
+        /// <summary>
+        /// 青色(0, 0, 255)
+        /// </summary>
+        public static readonly RGB Blue = new RGB(0, 0, 255);
+    }
+
+    /// <summary>
+    /// グレースケール変換法
+    /// </summary>
+    public struct GrayScaleMethod
+    {
+        /// <summary>
+        /// v = (R+G+B)/3
+        /// </summary>
+        public const int Average = 0;
+        /// <summary>
+        /// v = 0.299R + 0.587G + 0.114B
+        /// </summary>
+        public const int BT601 = 1;
+        /// <summary>
+        /// v = 0.2126R + 0.7152G + 0.0722B
+        /// </summary>
+        public const int BT709 = 2;
+        /// <summary>
+        /// v = 0.25R + 0.50G + 0.25B
+        /// </summary>
+        public const int YCgCo = 3;
+        /// <summary>
+        /// v = max(R, G, B)
+        /// </summary>
+        public const int Max = 4;
+        /// <summary>
+        /// v = min(R, G, B)
+        /// </summary>
+        public const int Min = 5;
+    }
+
     /// <summary>
     /// 画像処理クラス
     /// </summary>
@@ -92,114 +232,6 @@ namespace MiYALAB.CSharp.Image
         }
 
         //--------------------------------------------------------------------------------
-        // 画像処理用構造体
-        //--------------------------------------------------------------------------------
-        /// <summary>
-        /// 輝度データ
-        /// </summary>
-        public struct RGB
-        {
-            /// <summary>
-            /// 輝度データ
-            /// </summary>
-            /// <param name="_R"></param>
-            /// <param name="_G"></param>
-            /// <param name="_B"></param>
-            public RGB(byte _R, byte _G, byte _B)
-            {
-                R = _R;
-                G = _G;
-                B = _B;
-            }
-            /// <summary>
-            /// 輝度データ
-            /// </summary>
-            /// <param name="_R"></param>
-            /// <param name="_G"></param>
-            /// <param name="_B"></param>
-            public RGB(int _R, int _G, int _B)
-            {
-                R = (byte)_R;
-                G = (byte)_G;
-                B = (byte)_B;
-            }
-            /// <summary>
-            /// 輝度
-            /// </summary>
-            public byte R, G, B;
-        }
-
-        /// <summary>
-        /// 座標データ
-        /// </summary>
-        public struct Point
-        {
-            /// <summary>
-            /// 座標データ
-            /// </summary>
-            /// <param name="_x"></param>
-            /// <param name="_y"></param>
-            public Point(int _x, int _y)
-            {
-                X = _x;
-                Y = _y;
-            }
-
-            /// <summary>
-            /// 座標
-            /// </summary>
-            public int X, Y;
-        }
-
-        /// <summary>
-        /// 画像サイズデータ
-        /// </summary>
-        public struct Size
-        {
-            /// <summary>
-            /// 画像サイズデータ
-            /// </summary>
-            /// <param name="_width"></param>
-            /// <param name="_height"></param>
-            public Size(int _width, int _height)
-            {
-                Width = _width;
-                Height = _height;
-            }
-            /// <summary>
-            /// サイズ
-            /// </summary>
-            public int Width, Height;
-        }
-
-        /// <summary>
-        /// 色の輝度データ
-        /// </summary>
-        public static class Color
-        {
-            /// <summary>
-            /// 黒色(0, 0, 0)
-            /// </summary>
-            public static readonly RGB Black = new RGB(0, 0, 0);
-            /// <summary>
-            /// 白色(255, 255, 255)
-            /// </summary>
-            public static readonly RGB White = new RGB(255, 255, 255);
-            /// <summary>
-            /// 赤色(255, 0, 0)
-            /// </summary>
-            public static readonly RGB Red = new RGB(255, 0, 0);
-            /// <summary>
-            /// 緑色(0, 255, 0)
-            /// </summary>
-            public static readonly RGB Green = new RGB(0, 255, 0);
-            /// <summary>
-            /// 青色(0, 0, 255)
-            /// </summary>
-            public static readonly RGB Blue = new RGB(0, 0, 255);
-        }
-
-        //--------------------------------------------------------------------------------
         // トリミング関連
         //--------------------------------------------------------------------------------
         /// <summary>
@@ -213,19 +245,22 @@ namespace MiYALAB.CSharp.Image
         /// <param name="trimWidth">トリミング幅</param>
         /// <param name="trimHeight">トリミング高さ</param>
         /// <returns>トリミング画像のbyte配列</returns>
-        public static byte[] Trim(byte[] rgbValues, int posX, int posY, int bmpWidth, int bmpHeight, int trimWidth, int trimHeight)
+        public static byte[] Trim(byte[] rgbValues, int bmpWidth, int bmpHeight, int posX, int posY, int trimWidth, int trimHeight)
         {
             int x, y;
+            int retWork, rgbWork;
             byte[] ret = new byte[4 * trimWidth * trimHeight];
 
             for (y = 0; y < trimHeight; y++)
             {
                 for (x = 0; x < trimWidth; x++)
                 {
-                    ret[4 * (trimWidth * y + x)] = rgbValues[4 * (bmpWidth * (y + posY) + (x + posX))];
-                    ret[4 * (trimWidth * y + x) + 1] = rgbValues[4 * (bmpWidth * (y + posY) + (x + posX)) + 1];
-                    ret[4 * (trimWidth * y + x) + 2] = rgbValues[4 * (bmpWidth * (y + posY) + (x + posX)) + 2];
-                    ret[4 * (trimWidth * y + x) + 3] = rgbValues[4 * (bmpWidth * (y + posY) + (x + posX)) + 3];
+                    retWork = 4 * (trimWidth * y + x);
+                    rgbWork = 4 * (bmpWidth * (y + posY) + (x + posX));
+                    ret[retWork] = rgbValues[rgbWork];
+                    ret[retWork + 1] = rgbValues[rgbWork + 1];
+                    ret[retWork + 2] = rgbValues[rgbWork + 2];
+                    ret[retWork + 3] = rgbValues[rgbWork + 3];
                 }
             }
 
@@ -240,9 +275,10 @@ namespace MiYALAB.CSharp.Image
         /// <param name="bmpSize">画像サイズ</param>
         /// <param name="trimSize">トリミングサイズ</param>
         /// <returns>トリミング画像のbyte配列</returns>
-        public static byte[] Trim(byte[] rgbValues, Point pos, Size bmpSize, Size trimSize)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static byte[] Trim(byte[] rgbValues, Size bmpSize, Point pos, Size trimSize)
         {
-            return Trim(rgbValues, pos.X, pos.Y, bmpSize.Width, bmpSize.Height, trimSize.Width, trimSize.Height);
+            return Trim(rgbValues, bmpSize.Width, bmpSize.Height, pos.X, pos.Y, trimSize.Width, trimSize.Height);
         }
 
         /// <summary>
@@ -254,10 +290,11 @@ namespace MiYALAB.CSharp.Image
         /// <param name="trimWidth">トリミング幅</param>
         /// <param name="trimHeight">トリミング高さ</param>
         /// <returns>トリミング画像</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Bitmap Trim(Bitmap bmp, int posX, int posY, int trimWidth, int trimHeight)
         {
             return ByteArrayToBitmap(
-                Trim(BitmapToByteArray(bmp), posX, posY, bmp.Width, bmp.Height, trimWidth, trimHeight),
+                Trim(BitmapToByteArray(bmp),  bmp.Width, bmp.Height, posX, posY, trimWidth, trimHeight),
                 trimWidth,
                 trimHeight);
         }
@@ -269,45 +306,18 @@ namespace MiYALAB.CSharp.Image
         /// <param name="pos">トリミング左上座標</param>
         /// <param name="trimSize">トリミングサイズ</param>
         /// <returns>トリミング画像</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Bitmap Trim(Bitmap bmp, Point pos, Size trimSize)
         {
-            return Trim(bmp, pos.X, pos.Y, trimSize.Width, trimSize.Height);
+            return ByteArrayToBitmap(
+                Trim(BitmapToByteArray(bmp), bmp.Width, bmp.Height, pos.X, pos.Y, trimSize.Width, trimSize.Height),
+                trimSize.Width,
+                trimSize.Height);
         }
 
         //--------------------------------------------------------------------------------
         // グレースケール変換関連
         //--------------------------------------------------------------------------------
-        /// <summary>
-        /// グレースケール変換法
-        /// </summary>
-        public static class GRAYSCALE
-        {
-            /// <summary>
-            /// v = (R+G+B)/3
-            /// </summary>
-            public const int Average = 0;
-            /// <summary>
-            /// v = 0.299R + 0.587G + 0.114B
-            /// </summary>
-            public const int BT601 = 1;
-            /// <summary>
-            /// v = 0.2126R + 0.7152G + 0.0722B
-            /// </summary>
-            public const int BT709 = 2;
-            /// <summary>
-            /// v = 0.25R + 0.50G + 0.25B
-            /// </summary>
-            public const int YCgCo = 3;
-            /// <summary>
-            /// v = max(R, G, B)
-            /// </summary>
-            public const int Max = 4;
-            /// <summary>
-            /// v = min(R, G, B)
-            /// </summary>
-            public const int Min = 5;
-        }
-
         /// <summary>
         /// byte配列のbitmapデータをグレースケール化する．
         /// </summary>
@@ -321,12 +331,12 @@ namespace MiYALAB.CSharp.Image
 
             for (int i = 0; i < rgbValues.Length; i += 4)
             {
-                if (method == GRAYSCALE.Average) work = (rgbValues[i] + rgbValues[i + 1] + rgbValues[i + 2]) / 3;
-                else if (method == GRAYSCALE.BT601) work = 0.299 * rgbValues[i + 2] + 0.587 * rgbValues[i + 1] + 0.114 * rgbValues[i];
-                else if (method == GRAYSCALE.BT709) work = 0.2126 * rgbValues[i + 2] + 0.7152 * rgbValues[i + 1] + 0.0722 * rgbValues[i];
-                else if (method == GRAYSCALE.YCgCo) work = 0.25 * rgbValues[i + 2] + 0.5 * rgbValues[i + 1] + 0.25 * rgbValues[i];
-                else if (method == GRAYSCALE.Max) work = Math.Max(Math.Max(rgbValues[i], rgbValues[i + 1]), rgbValues[i + 2]);
-                else if (method == GRAYSCALE.Min) work = Math.Min(Math.Min(rgbValues[i], rgbValues[i + 1]), rgbValues[i + 2]);
+                if (method == GrayScaleMethod.Average) work = (double)(rgbValues[i] + rgbValues[i + 1] + rgbValues[i + 2]) / 3;
+                else if (method == GrayScaleMethod.BT601) work = (double)0.299 * rgbValues[i + 2] + 0.587 * rgbValues[i + 1] + 0.114 * rgbValues[i];
+                else if (method == GrayScaleMethod.BT709) work = (double)0.2126 * rgbValues[i + 2] + 0.7152 * rgbValues[i + 1] + 0.0722 * rgbValues[i];
+                else if (method == GrayScaleMethod.YCgCo) work = (double)0.25 * rgbValues[i + 2] + 0.5 * rgbValues[i + 1] + 0.25 * rgbValues[i];
+                else if (method == GrayScaleMethod.Max) work = Math.Max(Math.Max(rgbValues[i], rgbValues[i + 1]), rgbValues[i + 2]);
+                else if (method == GrayScaleMethod.Min) work = Math.Min(Math.Min(rgbValues[i], rgbValues[i + 1]), rgbValues[i + 2]);
 
                 ret[i] = ret[i + 1] = ret[i + 2] = (byte)work;
                 ret[i + 3] = 255;
@@ -341,6 +351,7 @@ namespace MiYALAB.CSharp.Image
         /// <param name="bmp">bitmap</param>
         /// <param name="method">変換法</param>
         /// <returns>グレースケール画像</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Bitmap GrayscaleConverter(Bitmap bmp, int method)
         {
             return ByteArrayToBitmap(
@@ -377,6 +388,7 @@ namespace MiYALAB.CSharp.Image
         /// </summary>
         /// <param name="bmp">bitmap</param>
         /// <returns>色反転画像</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Bitmap Not(Bitmap bmp)
         {
             return ByteArrayToBitmap(
@@ -415,6 +427,7 @@ namespace MiYALAB.CSharp.Image
         /// <param name="bmp1">bitmap</param>
         /// <param name="bmp2">bitmap</param>
         /// <returns>論理積画像</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Bitmap And(Bitmap bmp1, Bitmap bmp2)
         {
             return ByteArrayToBitmap(
@@ -453,6 +466,7 @@ namespace MiYALAB.CSharp.Image
         /// <param name="bmp1">bitmap</param>
         /// <param name="bmp2">bitmap</param>
         /// <returns>論理和画像</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Bitmap Or(Bitmap bmp1, Bitmap bmp2)
         {
             return ByteArrayToBitmap(
@@ -478,24 +492,28 @@ namespace MiYALAB.CSharp.Image
         /// <param name="width">ポインタの幅</param>
         /// <param name="height">ポインタの高さ</param>
         /// <returns>四角のポイント描画画像のbyte配列</returns>
-        public static byte[] PointSquare(byte[] rgbValues, int bmpWidth, int bmpHeight,
+        public static byte[] PointBox(byte[] rgbValues, int bmpWidth, int bmpHeight,
             byte R, byte G, byte B, int posX, int posY, int width, int height)
         {
-            int x, y;
-            int wWork = width / 2;
-            int hWork = height / 2;
-
+            int retWork;
             byte[] ret = new byte[rgbValues.Length];
             Array.Copy(rgbValues, ret, rgbValues.Length);
 
-            for (y = posY - hWork; y <= posY + hWork; y++)
+            int wWork = posX + width / 2;
+            int wbWork = posX - width / 2;
+            int hWork = posY + height / 2;
+            int x, y = posY - height / 2;
+
+            for ( ; y <= hWork; y++)
             {
-                for (x = posX - wWork; x <= posX + wWork; x++)
+                for (x = wbWork; x <= wWork; x++)
                 {
                     if (x < 0 || bmpWidth <= x || y < 0 || bmpHeight <= y) continue;
-                    ret[4 * (bmpWidth * y + x)] = B;
-                    ret[4 * (bmpWidth * y + x) + 1] = G;
-                    ret[4 * (bmpWidth * y + x) + 2] = R;
+                    
+                    retWork = 4 * (bmpWidth * y + x);
+                    ret[retWork] = B;
+                    ret[retWork + 1] = G;
+                    ret[retWork + 2] = R;
                 }
             }
 
@@ -510,10 +528,11 @@ namespace MiYALAB.CSharp.Image
         /// <param name="color">ポインタの色</param>
         /// <param name="pos">ポインタの座標</param>
         /// <param name="size">ポインタのサイズ</param>
-        /// <returns>>四角のポイント描画画像のbyte配列</returns>
-        public static byte[] PointSquare(byte[] rgbValues, Size bmpSize, RGB color, Point pos, Size size)
+        /// <returns>四角のポイント描画画像のbyte配列</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static byte[] PointBox(byte[] rgbValues, Size bmpSize, RGB color, Point pos, Size size)
         {
-            return PointSquare(rgbValues, bmpSize.Width, bmpSize.Height, color.R, color.G, color.B, pos.X, pos.Y, size.Width, size.Height);
+            return PointBox(rgbValues, bmpSize.Width, bmpSize.Height, color.R, color.G, color.B, pos.X, pos.Y, size.Width, size.Height);
         }
 
         /// <summary>
@@ -528,10 +547,11 @@ namespace MiYALAB.CSharp.Image
         /// <param name="width">ポインタの幅</param>
         /// <param name="height">ポインタの高さ</param>
         /// <returns>四角のポイント描画画像</returns>
-        public static Bitmap PointSquare(Bitmap bmp, byte R, byte G, byte B, int posX, int posY, int width, int height)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Bitmap PointBox(Bitmap bmp, byte R, byte G, byte B, int posX, int posY, int width, int height)
         {
             return ByteArrayToBitmap(
-                PointSquare(BitmapToByteArray(bmp), bmp.Width, bmp.Height, R, G, B, posX, posY, width, height),
+                PointBox(BitmapToByteArray(bmp), bmp.Width, bmp.Height, R, G, B, posX, posY, width, height),
                 bmp.Width,
                 bmp.Height);
         }
@@ -543,11 +563,12 @@ namespace MiYALAB.CSharp.Image
         /// <param name="color">ポインタの色</param>
         /// <param name="pos">ポインタの座標</param>
         /// <param name="size">ポインタのサイズ</param>
-        /// <returns>>四角のポイント描画画像</returns>
-        public static Bitmap PointSquare(Bitmap bmp, RGB color, Point pos, Size size)
+        /// <returns>四角のポイント描画画像</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Bitmap PointBox(Bitmap bmp, RGB color, Point pos, Size size)
         {
             return ByteArrayToBitmap(
-                PointSquare(BitmapToByteArray(bmp), bmp.Width, bmp.Height, color.R, color.G, color.B, pos.X, pos.Y, size.Width, size.Height),
+                PointBox(BitmapToByteArray(bmp), bmp.Width, bmp.Height, color.R, color.G, color.B, pos.X, pos.Y, size.Width, size.Height),
                 bmp.Width,
                 bmp.Height);
         }
@@ -569,29 +590,33 @@ namespace MiYALAB.CSharp.Image
         /// <param name="width">ラインの幅</param>
         /// <param name="height">ラインの高さ</param>
         /// <returns>四角のライン描画画像のbyte配列</returns>
-        public static byte[] DrawBox(byte[] rgbValues, int bmpWidth, int bmpHeight,
+        public static byte[] DrawBoxLine(byte[] rgbValues, int bmpWidth, int bmpHeight,
             byte R, byte G, byte B, int posX, int posY, int width, int height)
         {
             int p;
-            int x, y;
-            int wWork = width / 2;
-            int hWork = height / 2;
+            int pWork = width + posX;
 
+            int retWork, retWork2;
             byte[] ret = new byte[rgbValues.Length];
             Array.Copy(rgbValues, ret, rgbValues.Length);
 
-            for(p = posX; p < width + posX; p++)
+            for(p = posX; p < pWork; p++)
             {
-                ret[4 * (bmpWidth * posY + p)] = ret[4 * (bmpWidth * (posY + height - 1) + p)] = B;
-                ret[4 * (bmpWidth * posY + p) + 1] = ret[4 * (bmpWidth * (posY + height - 1) + p) + 1] = G;
-                ret[4 * (bmpWidth * posY + p) + 2] = ret[4 * (bmpWidth * (posY + height - 1) + p) + 2] = R;
+                retWork = 4 * (bmpWidth * posY + p);
+                retWork2 = 4 * (bmpWidth * (posY + height - 1) + p);
+                ret[retWork] = ret[retWork2] = B;
+                ret[retWork + 1] = ret[retWork2 + 1] = G;
+                ret[retWork + 2] = ret[retWork2 + 2] = R;
             }
 
-            for(p = posY; p < height + posY; p++)
+            pWork = height + posY;
+            for (p = posY; p < pWork; p++)
             {
-                ret[4 * (bmpWidth * p + posX)] = ret[4 * (bmpWidth * p + posX + width - 1)] = B;
-                ret[4 * (bmpWidth * p + posX) + 1] = ret[4 * (bmpWidth * p + posX + width - 1) + 1] = G;
-                ret[4 * (bmpWidth * p + posX) + 2] = ret[4 * (bmpWidth * p + posX + width - 1) + 2] = R;
+                retWork = 4 * (bmpWidth * p + posX);
+                retWork2 = 4 * (bmpWidth * p + posX + width - 1);
+                ret[retWork] = ret[retWork2] = B;
+                ret[retWork + 1] = ret[retWork2 + 1] = G;
+                ret[retWork + 2] = ret[retWork2 + 2] = R;
             }
 
             return ret;
@@ -605,334 +630,58 @@ namespace MiYALAB.CSharp.Image
         /// <param name="color">ラインの色</param>
         /// <param name="pos">ラインの座標</param>
         /// <param name="size">ラインのサイズ</param>
-        /// <returns>>四角のライン描画画像のbyte配列</returns>
-        public static byte[] DrawBox(byte[] rgbValues, Size bmpSize, RGB color, Point pos, Size size)
+        /// <returns>四角のライン描画画像のbyte配列</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static byte[] DrawBoxLine(byte[] rgbValues, Size bmpSize, RGB color, Point pos, Size size)
         {
-            return DrawBox(rgbValues, bmpSize.Width, bmpSize.Height, color.R, color.G, color.B, pos.X, pos.Y, size.Width, size.Height);
-        }
-
-        //--------------------------------------------------------------------------------
-        // ラベリング関連
-        //--------------------------------------------------------------------------------
-        /// <summary>
-        /// ラベルデータ構造
-        /// </summary>
-        public struct Label
-        {
-            /// <summary>
-            /// ラベルデータ構造
-            /// </summary>
-            /// <param name="_posUL">左上座標</param>
-            /// <param name="_posDR">右下座標</param>
-            /// <param name="_size">画像サイズ</param>
-            /// <param name="_area">面積</param>
-            /// <param name="_centroid">重心座標</param>
-            /// <param name="_rgbValues">bitmapのbyte配列</param>
-            /// <param name="_bmp">bitmap</param>
-            public Label(Point _posUL, Point _posDR, Size _size, int _area, Point _centroid, byte[] _rgbValues, Bitmap _bmp)
-            {
-                Pos = _posUL;
-                PosDR = _posDR;
-                Size = _size;
-                Area = _area;
-                Centroid = _centroid;
-                rgbValues = _rgbValues;
-                bmp = _bmp;
-            }
-
-            /// <summary>
-            /// 左上座標
-            /// </summary>
-            public Point Pos;
-            /// <summary>
-            /// 右下座標
-            /// </summary>
-            public Point PosDR;
-            /// <summary>
-            /// サイズ
-            /// </summary>
-            public Size Size;
-            /// <summary>
-            /// 面積
-            /// </summary>
-            public int Area;
-            /// <summary>
-            /// 重心座標
-            /// </summary>
-            public Point Centroid;
-            /// <summary>
-            /// bitmapデータのbyte配列
-            /// </summary>
-            public byte[] rgbValues;
-            /// <summary>
-            /// bitmapデータ
-            /// </summary>
-            public Bitmap bmp;
+            return DrawBoxLine(rgbValues, bmpSize.Width, bmpSize.Height, color.R, color.G, color.B, pos.X, pos.Y, size.Width, size.Height);
         }
 
         /// <summary>
-        /// ラベリング処理(ラスタスキャン方式)
+        /// byte配列のbitmapデータに四角のラインを描画します．
         /// </summary>
-        /// <param name="rgbValues">byte配列に変換された二値化bitmap</param>
-        /// <param name="width">Bitmapデータの幅</param>
-        /// <param name="height">Bitmapデータの高さ</param>
-        /// <returns>ラベルデータ配列</returns>
-        public static Label[] Labeling(byte[] rgbValues, int width, int height)
+        /// <param name="rgbValues">byte配列のbitmap</param>
+        /// <param name="bmpSize">Bitmapデータのサイズ</param>
+        /// <param name="color">ラインの色</param>
+        /// <param name="posUL">ラインの左上座標</param>
+        /// <param name="posDR">ラインの右下座標</param>
+        /// <returns>四角のライン描画画像のbyte配列</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static byte[] DrawBoxLine(byte[] rgbValues, Size bmpSize, RGB color, Point posUL, Point posDR)
         {
+            return DrawBoxLine(rgbValues, bmpSize.Width, bmpSize.Height,
+                color.R, color.G, color.B,
+                posUL.X, posUL.Y,
+                posDR.X - posUL.X + 1, posDR.Y - posUL.Y + 1);
+        }
+
+        //--------------------------------------------------------------------------------
+        // 四角の描画処理関連
+        //--------------------------------------------------------------------------------
+        public static byte[] DrawBox(byte[] rgbValues, int bmpWidth, int bmpHeight,
+            byte R, byte G, byte B, int posX, int posY, int width, int height)
+        {
+            int retWork;
+            byte[] ret = new byte[rgbValues.Length];
+            Array.Copy(rgbValues, ret, rgbValues.Length);
+
             int x, y;
-            int num = 1;
-            int[] labelNum = new int[rgbValues.Length / 4];
-            List<int> depth = new List<int>() { 0 };
-            byte[] _rgbValues = new byte[rgbValues.Length];
-            Array.Copy(rgbValues, _rgbValues, rgbValues.Length);
-
-            // 単純ラベル割り当て
-            int check;
-            int[] work = new int[9] { 65536, 65536, 65536, 65536, 65536, 65536, 65536, 65536, 65536 };
-            for (y = 0; y < height; y++)
+            int xWork = width + posX;
+            int yWork = height + posY;
+            
+            for(y = posY; y < yWork; y++)
             {
-                for (x = 0; x < width; x++)
+                for(x = posX; x < xWork; x++)
                 {
-                    if (rgbValues[4 * (width * y + x)] == 255)
-                    {
-                        work[0] = work[1] = work[2] = work[3] = 65536;
-
-                        // 注目画素左上
-                        if (0 < x && 0 < y && labelNum[width * (y - 1) + (x - 1)] != 0)
-                            work[0] = labelNum[width * (y - 1) + (x - 1)];
-                        
-                        // 注目画素右上
-                        if (x < width - 1 && 0 < y && labelNum[width * (y - 1) + (x + 1)] != 0)
-                            work[1] = labelNum[width * (y - 1) + (x + 1)];
-
-                        // 注目画素上
-                        if (0 < y && labelNum[width * (y - 1) + (x)] != 0)
-                            work[2] = labelNum[width * (y - 1) + (x)];
-
-                        // 注目画素左
-                        if (0 < x && labelNum[width * (y) + (x - 1)] != 0)
-                            work[3] = labelNum[width * (y) + (x - 1)];
-
-                        check = work.Min();
-
-                        // 新しいラベル番号割り当て
-                        if(check == 65536)
-                        {
-                            depth.Add(num);
-                            labelNum[width * y + x] = num;
-
-                            num++;
-                        }
-
-                        // 最小ラベル番号割り当て 最接近ラベルデータ更新
-                        else
-                        {
-                            labelNum[width * y + x] = check;
-
-                            if (work[0] != 65536)
-                            {
-                                depth[labelNum[width * (y - 1) + (x - 1)]] = Math.Min(check, depth[labelNum[width * (y - 1) + (x - 1)]]);
-                            }
-                            if (work[1] != 65536)
-                            {
-                                depth[labelNum[width * (y - 1) + (x + 1)]] = Math.Min(check, depth[labelNum[width * (y - 1) + (x + 1)]]);
-                            }
-                            if (work[2] != 65536)
-                            {
-                                depth[labelNum[width * (y - 1) + (x)]] = Math.Min(check, depth[labelNum[width * (y - 1) + (x)]]);
-                            }
-                            if (work[3] != 65536)
-                            {
-                                depth[labelNum[width * (y) + (x - 1)]] = Math.Min(check, depth[labelNum[width * (y) + (x - 1)]]);
-                            }
-                        }
-
-                        // 黒色に変換
-                        _rgbValues[4 * (width * y + x)] = 0;
-                        _rgbValues[4 * (width * y + x) + 1] = 0;
-                        _rgbValues[4 * (width * y + x) + 2] = 0;
-                    }
+                    retWork = 4 * (bmpWidth * y + x);
+                    ret[retWork] = B;
+                    ret[retWork + 1] = G;
+                    ret[retWork + 2] = R;
+                    ret[retWork + 3] = 255;
                 }
             }
 
-            // 最接近ラベル修正
-            for(x = depth.Count - 1; 0 < x; x--)
-            {
-                check = x;
-
-                while (check != depth[check])
-                {
-                    check = depth[check];
-                    depth[x] = check;
-                }
-            }
-
-            // 最接近ラベル再探索(2列間隔捜査)
-            for (y = 0; y < height; y += 2)
-            {
-                for (x = 0; x < width; x++)
-                {
-                    if (labelNum[width * y + x] != 0)
-                    {
-                        work[0] = work[1] = work[2] = work[3] = work[5] = work[6] = work[7] = work[8] = 65536;
-                        work[4] = depth[labelNum[width * y + x]];
-
-                        // 注目画素左上
-                        if (0 < x && 0 < y && labelNum[width * (y - 1) + (x - 1)] != 0)
-                            work[0] = depth[labelNum[width * (y - 1) + (x - 1)]];
-
-                        // 注目画素右上
-                        if (x < width - 1 && 0 < y && labelNum[width * (y - 1) + (x + 1)] != 0)
-                            work[1] = depth[labelNum[width * (y - 1) + (x + 1)]];
-
-                        // 注目画素上
-                        if (0 < y && labelNum[width * (y - 1) + (x)] != 0)
-                            work[2] = depth[labelNum[width * (y - 1) + (x)]];
-
-                        // 注目画素左
-                        if (0 < x && labelNum[width * (y) + (x - 1)] != 0)
-                            work[3] = depth[labelNum[width * (y) + (x - 1)]];
-
-                        // 注目画素左下
-                        if (0 < x && y < height - 1 && labelNum[width * (y + 1) + (x - 1)] != 0)
-                            work[5] = depth[labelNum[width * (y + 1) + (x - 1)]];
-
-                        // 注目画素右下
-                        if (x < width - 1 && y < height - 1 && labelNum[width * (y + 1) + (x + 1)] != 0)
-                            work[6] = depth[labelNum[width * (y + 1) + (x + 1)]];
-
-                        // 注目画素下
-                        if (y < height - 1 && labelNum[width * (y + 1) + (x)] != 0)
-                            work[7] = depth[labelNum[width * (y + 1) + (x)]];
-
-                        // 注目画素右
-                        if (x < width - 1 && labelNum[width * (y) + (x + 1)] != 0)
-                            work[8] = depth[labelNum[width * (y) + (x + 1)]];
-
-                        check = work.Min();
-                        depth[labelNum[width * y + x]] = check;
-
-                        if (work[0] != 65536)
-                        {
-                            depth[labelNum[width * (y - 1) + (x - 1)]] = Math.Min(check, depth[labelNum[width * (y - 1) + (x - 1)]]);
-                        }
-                        if (work[1] != 65536)
-                        {
-                            depth[labelNum[width * (y - 1) + (x + 1)]] = Math.Min(check, depth[labelNum[width * (y - 1) + (x + 1)]]);
-                        }
-                        if (work[2] != 65536)
-                        {
-                            depth[labelNum[width * (y - 1) + (x)]] = Math.Min(check, depth[labelNum[width * (y - 1) + (x)]]);
-                        }
-                        if (work[3] != 65536)
-                        {
-                            depth[labelNum[width * (y) + (x - 1)]] = Math.Min(check, depth[labelNum[width * (y) + (x - 1)]]);
-                        }
-                        if (work[5] != 65536)
-                        {
-                            depth[labelNum[width * (y + 1) + (x - 1)]] = Math.Min(check, depth[labelNum[width * (y + 1) + (x - 1)]]);
-                        }
-                        if (work[6] != 65536)
-                        {
-                            depth[labelNum[width * (y + 1) + (x + 1)]] = Math.Min(check, depth[labelNum[width * (y + 1) + (x + 1)]]);
-                        }
-                        if (work[7] != 65536)
-                        {
-                            depth[labelNum[width * (y + 1) + (x)]] = Math.Min(check, depth[labelNum[width * (y + 1) + (x)]]);
-                        }
-                        if (work[8] != 65536)
-                        {
-                            depth[labelNum[width * (y) + (x + 1)]] = Math.Min(check, depth[labelNum[width * (y) + (x + 1)]]);
-                        }
-                    }
-                }
-            }
-
-            // 最接近ラベル修正
-            for (x = depth.Count - 1; 0 < x; x--)
-            {
-                check = x;
-
-                while (check != depth[check])
-                {
-                    check = depth[check];
-                    depth[x] = check;
-                }
-            }
-
-            // ラベルデータ数算出
-            IDictionary<int, int> listNum = new Dictionary<int, int>();
-            listNum.Add(0, 0);
-            for(x = 1; x < depth.Count; x++)
-            {
-                if(x == depth[x])
-                {
-                    listNum.Add(x, listNum.Count);
-                }
-            }
-
-            // ラベル初期化
-            Label init = new Label(
-                new Point(width, height),
-                new Point(0, 0),
-                new Size(0, 0),
-                0,
-                new Point(0, 0),
-                null,
-                null);
-            Label[] labels = Enumerable.Repeat<Label>(init, listNum.Count).ToArray();
-
-            // ラベルデータ配列のrgbValues初期化
-            for (x = 0; x < listNum.Count; x++)
-            {
-                labels[x].rgbValues = new byte[rgbValues.Length];
-                Array.Copy(rgbValues, labels[x].rgbValues, rgbValues.Length);
-            }
-
-            // ラベル番号再割り当て
-            for (y = 0; y < height; y++)
-            {
-                for (x = 0; x < width; x++)
-                {
-                    if (labelNum[width * y + x] != 0)
-                    {
-                        work[0] = labelNum[(width * y + x)] = depth[labelNum[(width * y + x)]];
-                        work[0] = listNum[work[0]];
-                        labels[work[0]].rgbValues[4 * (width * y + x)] = 255;
-                        labels[work[0]].rgbValues[4 * (width * y + x) + 1] = 255;
-                        labels[work[0]].rgbValues[4 * (width * y + x) + 2] = 255;
-                        labels[work[0]].Area += 1;
-                        labels[work[0]].Centroid.X += x;
-                        labels[work[0]].Centroid.Y += y;
-                        if (labels[work[0]].Pos.X > x) labels[work[0]].Pos.X = x;
-                        if (labels[work[0]].Pos.Y > y) labels[work[0]].Pos.Y = y;
-                        if (labels[work[0]].PosDR.X < x) labels[work[0]].PosDR.X = x;
-                        if (labels[work[0]].PosDR.Y < y) labels[work[0]].PosDR.Y = y;
-                    }
-                }
-            }
-
-            // ラベルのパラメータ計算
-            for(x = 1; x < listNum.Count; x++)
-            {
-                labels[x].Centroid.X /= labels[x].Area;
-                labels[x].Centroid.Y /= labels[x].Area;
-                labels[x].Size.Width = labels[x].PosDR.X - labels[x].Pos.X + 1;
-                labels[x].Size.Height = labels[x].PosDR.Y - labels[x].Pos.Y + 1;
-            }
-
-            return labels;
-        }
-
-        /// <summary>
-        /// ラベリング処理(ラスタスキャン方式)
-        /// </summary>
-        /// <param name="rgbValues">byte配列に変換された二値化bitmap</param>
-        /// <param name="size">bitmapデータのサイズ</param>
-        /// <returns></returns>
-        public static Label[] Labeling(byte[] rgbValues, Size size)
-        {
-            return Labeling(rgbValues, size.Width, size.Height);
+            return ret;
         }
     }
 }
