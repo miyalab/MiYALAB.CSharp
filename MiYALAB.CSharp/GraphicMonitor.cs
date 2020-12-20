@@ -82,6 +82,7 @@ namespace MiYALAB.CSharp.Monitor
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GraphicMonitor));
             this.pictureBox = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.SuspendLayout();
@@ -102,6 +103,7 @@ namespace MiYALAB.CSharp.Monitor
             this.ClientSize = new System.Drawing.Size(284, 261);
             this.ControlBox = false;
             this.Controls.Add(this.pictureBox);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "GraphicMonitor";

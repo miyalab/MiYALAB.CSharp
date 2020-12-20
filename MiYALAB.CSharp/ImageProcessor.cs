@@ -204,6 +204,13 @@ namespace MiYALAB.CSharp.Image
             return rgbValues;
         }
 
+        /// <summary>
+        /// byte配列をBitmapに変換する．
+        /// </summary>
+        /// <param name="rgbValues">1 pixel = 4 byte (+3:A, +2:R, +1:G, +0:B) に変換されたたbyte配列</param>
+        /// <param name="width">変換後のbitmapの幅</param>
+        /// <param name="height">変換後のbitmapの高さ</param>
+        /// <returns>Bitmap</returns>
         public static Bitmap ByteArrayToBitmap(byte[] rgbValues, int width, int height)
         {
             Bitmap bmp = new Bitmap(width, height);
@@ -658,6 +665,20 @@ namespace MiYALAB.CSharp.Image
         //--------------------------------------------------------------------------------
         // 四角の描画処理関連
         //--------------------------------------------------------------------------------
+        /// <summary>
+        /// byte配列のbitmapデータに四角を描画します．
+        /// </summary>
+        /// <param name="rgbValues">byte配列のbitmap</param>
+        /// <param name="bmpWidth">Bitmapデータの幅</param>
+        /// <param name="bmpHeight">Bitmapデータの高さ</param>
+        /// <param name="R">ラインの色(R)</param>
+        /// <param name="G">ラインの色(G)</param>
+        /// <param name="B">ラインの色(B)</param>
+        /// <param name="posX">ラインの座標(X)</param>
+        /// <param name="posY">ラインの座標(Y)</param>
+        /// <param name="width">ラインの幅</param>
+        /// <param name="height">ラインの高さ</param>
+        /// <returns>四角描画画像のbyte配列</returns>
         public static byte[] DrawBox(byte[] rgbValues, int bmpWidth, int bmpHeight,
             byte R, byte G, byte B, int posX, int posY, int width, int height)
         {
