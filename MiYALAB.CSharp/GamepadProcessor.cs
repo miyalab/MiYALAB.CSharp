@@ -32,7 +32,7 @@ namespace MiYALAB.CSharp
         /// <summary>
         /// ゲームパッドコントロール用クラス
         /// </summary>
-        class GamepadProcessor
+        public class GamepadProcessor
         {
             public const int MM_JOY1MOVE = 0x3A0;
             public const int MM_JOY2MOVE = 0x3A1;

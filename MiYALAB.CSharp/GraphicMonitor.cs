@@ -43,7 +43,7 @@ namespace MiYALAB.CSharp.Monitor
         /// <summary>
         /// 画像描画モニタを表示するフォームクラスです．
         /// </summary>
-        GraphicMonitor()
+        public GraphicMonitor()
         {
             InitializeComponent();
         }

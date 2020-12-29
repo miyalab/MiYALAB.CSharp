@@ -337,7 +337,7 @@ namespace MiYALAB.CSharp.Image
                 ret[i + 3] = 255;
             }
 
-            return rgbValues;
+            return ret;
         }
 
         /// <summary>
