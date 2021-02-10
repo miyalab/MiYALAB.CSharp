@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace MiYALAB.CSharp.Device
 {
 	/// <summary>
-	/// デバイスデータ
+	/// デバイスプロパティデータ
 	/// </summary>
 	public struct DeviceProperty
 	{
