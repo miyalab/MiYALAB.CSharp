@@ -43,7 +43,7 @@ namespace MiYALAB.CSharp.Device
 			foreach(ManagementObject device in new ManagementClass("Win32_PnPEntity").GetInstances().Cast<ManagementObject>())
 			{
 				deviceWork.pnpClass = (string)device.GetPropertyValue("PNPClass");
-				if (deviceWork.pnpClass == "Image" || (string)deviceWork.pnpClass == "Camera")
+				if (deviceWork.pnpClass == "Image" || deviceWork.pnpClass == "Camera")
 				{
 					deviceWork.name = (string)device.GetPropertyValue("Name");
 					deviceWork.deviceId = (string)device.GetPropertyValue("DeviceID");
