@@ -22,53 +22,69 @@ namespace MiYALAB.CSharp.Device
 		/// pnpクラス
 		/// </summary>
         public string pnpClass;
-        public string hardwareId;
+        /// <summary>
+        /// デバイスID
+        /// </summary>
+        public string deviceId;
     }
 
     /// <summary>
-    /// キャプチャデバイスデータ取得
+    /// キャプチャデバイスクラス
     /// </summary>
     public class CaptureDeviceProcessor
     {
-        public static List<DeviceInfo> GetCaptureDeviceList()
+        /// <summary>
+        /// キャプチャデバイスリストの取得
+        /// </summary>
+        /// <returns>キャプチャデバイスリスト</returns>
+        public static DeviceInfo[] GetDeviceList()
         {
             DeviceInfo work;
             List<DeviceInfo> devices = new List<DeviceInfo>();
-            ManagementClass pnpEntity = new ManagementClass("Win32_PnPEntity");
 
-            foreach(var pnp in pnpEntity.GetInstances())
+            foreach(ManagementBaseObject pnp in new ManagementClass("Win32_PnPEntity").GetInstances())
             {
-                if ((string)pnp.GetPropertyValue("PNPClass") == "Camera")
+                work.pnpClass = (string)pnp.GetPropertyValue("PNPClass");
+                if (work.pnpClass == "Camera" || work.pnpClass == "Image")
                 {
-                    work.name = pnp.GetPropertyValue("name").ToString();
-                    work.pnpClass = "Camera";
-                    work.hardwareId = pnp.GetPropertyValue("HardwareID").ToString();
+                    work.name = (string)pnp.GetPropertyValue("name");
+                    work.deviceId = (string)pnp.GetPropertyValue("DeviceID");
 
                     devices.Add(work);
                 }
             }
 
-            return devices;
+            return devices.ToArray();
         }
     }
 
     /// <summary>
-    /// シリアル通信デバイスデータ取得
+    /// シリアル通信デバイスクラス
     /// </summary>
     public class SerialDeviceProcessor
     {
-        public static IEnumerable<string> GetSerialDeviceList()
+        /// <summary>
+        /// シリアル通信デバイスリスト取得
+        /// </summary>
+        /// <returns>シリアル通信デバイスリスト</returns>
+        public static DeviceInfo[] GetDeviceList()
         {
-            ManagementClass pnpEntity = new ManagementClass("Win32_PnPEntity");
-            Regex comRegex = new Regex(@"\(COM[1-9][0-9]?[0-9]?\)");               // COMとつくものを探索
+            DeviceInfo work;
+            List<DeviceInfo> devices = new List<DeviceInfo>();
 
-            return pnpEntity
-                .GetInstances()                                                     // 一覧を取得
-                .Cast<ManagementObject>()
-                .Select(managementObj => managementObj.GetPropertyValue("Name"))    // デバイス名取得
-                .Where(nameObj => nameObj != null)                                  // nullのものは除外
-                .Select(nameObj => nameObj.ToString())                              // 文字列に変換
-                .Where(name => comRegex.IsMatch(name));                             // 正規表現でフィルタリング
+            foreach (ManagementBaseObject pnp in new ManagementClass("Win32_PnPEntity").GetInstances())
+            {
+                work.pnpClass = (string)pnp.GetPropertyValue("PNPClass");
+                if (work.pnpClass == "Ports")
+                {
+                    work.name = (string)pnp.GetPropertyValue("name");
+                    work.deviceId = (string)pnp.GetPropertyValue("DeviceID");
+
+                    devices.Add(work);
+                }
+            }
+
+            return devices.ToArray();
         }
     }
 }
