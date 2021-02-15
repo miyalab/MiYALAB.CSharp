@@ -122,7 +122,7 @@ namespace MiYALAB.CSharp.Monitor
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void pictureBox_SizeChanged(object sender, EventArgs e)
+        protected virtual void pictureBox_SizeChanged(object sender, EventArgs e)
         {
             this.ClientSize = new System.Drawing.Size(pictureBox.Width + 24, pictureBox.Height + 24);
         }
@@ -132,7 +132,7 @@ namespace MiYALAB.CSharp.Monitor
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void pictureBox_Click(object sender, EventArgs e)
+        protected virtual void pictureBox_Click(object sender, EventArgs e)
         {
             // フォルダ作成
             if (!Directory.Exists(this.Text))
