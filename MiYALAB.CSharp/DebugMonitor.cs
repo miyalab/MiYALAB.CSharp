@@ -51,6 +51,32 @@ namespace MiYALAB.CSharp.Monitor
         /// <summary>
         /// デバッグモニタを表示するフォームクラスです．
         /// </summary>
+        /// <param name="text">タイトルテキスト</param>
+        public DebugMonitor(string text)
+        {
+            InitializeComponent();
+
+            this.Text = text;
+        }
+
+        /// <summary>
+        /// デバッグモニタを表示するフォームクラスです．
+        /// </summary>
+        /// <param name="text">タイトルテキスト</param>
+        /// <param name="positionX">変更後のウインドウのx座標</param>
+        /// <param name="positionY">変更後のウインドウのy座標</param>
+        public DebugMonitor(string text, int positionX, int positionY)
+        {
+            InitializeComponent();
+
+            this.Text = text;
+            this.Show();
+            ChangeLocationWindow(positionX, positionY);
+        }
+
+        /// <summary>
+        /// デバッグモニタを表示するフォームクラスです．
+        /// </summary>
         /// <param name="positionX">変更後のウインドウのx座標</param>
         /// <param name="positionY">変更後のウインドウのy座標</param>
         public DebugMonitor(int positionX, int positionY)
@@ -59,6 +85,24 @@ namespace MiYALAB.CSharp.Monitor
             
             this.Show();
             ChangeLocationWindow(positionX, positionY);
+        }
+
+        /// <summary>
+        /// デバッグモニタを表示するフォームクラスです．
+        /// </summary>
+        /// <param name="text">タイトルテキスト</param>
+        /// <param name="positionX">変更後のウインドウのx座標</param>
+        /// <param name="positionY">変更後のウインドウのy座標</param>
+        /// <param name="sizeX">変更後のウインドウの幅</param>
+        /// <param name="sizeY">変更後のウインドウの高さ</param>
+        public DebugMonitor(string text, int positionX, int positionY, int sizeX, int sizeY)
+        {
+            InitializeComponent();
+
+            this.Text = text;
+            this.Show();
+            ChangeLocationWindow(positionX, positionY);
+            ChangeWindowSize(sizeX, sizeY);
         }
 
         /// <summary>

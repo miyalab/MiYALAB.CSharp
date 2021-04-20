@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiYALAB.CSharp", "MiYALAB.C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibCheck", "LibCheck\LibCheck.csproj", "{E226DF68-4F36-40F2-A544-3CFCEE324EF3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test", "test\test.csproj", "{D4DEC592-8B48-4D31-BD2C-25305C148A47}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{E226DF68-4F36-40F2-A544-3CFCEE324EF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E226DF68-4F36-40F2-A544-3CFCEE324EF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E226DF68-4F36-40F2-A544-3CFCEE324EF3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4DEC592-8B48-4D31-BD2C-25305C148A47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4DEC592-8B48-4D31-BD2C-25305C148A47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4DEC592-8B48-4D31-BD2C-25305C148A47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4DEC592-8B48-4D31-BD2C-25305C148A47}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
