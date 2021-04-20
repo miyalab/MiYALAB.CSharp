@@ -30,6 +30,7 @@ using System.Threading.Tasks;
 using System.Drawing;
 using System.IO;
 using System.Drawing.Imaging;
+using System.Windows.Forms;
 
 namespace MiYALAB.CSharp.Monitor
 {
@@ -67,11 +68,12 @@ namespace MiYALAB.CSharp.Monitor
         /// <param name="positionY">変更後のウインドウのy座標</param>
         public GraphicMonitor(string text, int positionX, int positionY)
         {
+            this.StartPosition = FormStartPosition.Manual;
+            this.Location = new System.Drawing.Point(positionX, positionY);
+
             InitializeComponent();
 
             this.Text = text;
-            this.Show();
-            ChangeLocationWindow(positionX, positionY);
         }
 
         /// <summary>
@@ -81,10 +83,10 @@ namespace MiYALAB.CSharp.Monitor
         /// <param name="positionY">変更後のウインドウのy座標</param>
         public GraphicMonitor(int positionX, int positionY)
         {
-            InitializeComponent();
+            this.StartPosition = FormStartPosition.Manual;
+            this.Location = new System.Drawing.Point(positionX, positionY);
 
-            this.Show();
-            ChangeLocationWindow(positionX, positionY);
+            InitializeComponent();
         }
 
         /// <summary>
@@ -97,12 +99,14 @@ namespace MiYALAB.CSharp.Monitor
         /// <param name="sizeY">変更後のウインドウの高さ</param>
         public GraphicMonitor(string text, int positionX, int positionY, int sizeX, int sizeY)
         {
+            this.StartPosition = FormStartPosition.Manual;
+            this.Location = new System.Drawing.Point(positionX, positionY);
+            
             InitializeComponent();
 
-            this.Text = text;
-            this.Show();
-            ChangeLocationWindow(positionX, positionY);
             ChangeWindowSize(sizeX, sizeY);
+
+            this.Text = text;
         }
 
         /// <summary>
@@ -114,10 +118,11 @@ namespace MiYALAB.CSharp.Monitor
         /// <param name="sizeY">変更後のウインドウの高さ</param>
         public GraphicMonitor(int positionX, int positionY, int sizeX, int sizeY)
         {
+            this.StartPosition = FormStartPosition.Manual;
+            this.Location = new System.Drawing.Point(positionX, positionY);
+
             InitializeComponent();
 
-            this.Show();
-            ChangeLocationWindow(positionX, positionY);
             ChangeWindowSize(sizeX, sizeY);
         }
 
@@ -178,6 +183,8 @@ namespace MiYALAB.CSharp.Monitor
         /// <param name="e"></param>
         protected virtual void pictureBox_Click(object sender, EventArgs e)
         {
+            if (pictureBox.Image == null) return;
+
             // フォルダ作成
             if (!Directory.Exists(this.Text))
             {
