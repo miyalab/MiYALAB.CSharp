@@ -209,7 +209,7 @@ namespace MiYALAB.CSharp.Monitor
         /// <param name="y">変更後のウインドウの高さ</param>
         public void ChangeWindowSize(int x, int y)
         {
-            this.Size = new System.Drawing.Size(x, y);
+            this.ClientSize = new System.Drawing.Size(x, y);
         }
 
         /// <summary>
