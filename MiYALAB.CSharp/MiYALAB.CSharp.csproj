@@ -50,6 +50,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="DeviceProcessor.cs" />
+    <Compile Include="FileProcessor.cs" />
     <Compile Include="GamepadProcessor.cs" />
     <Compile Include="GraphicMonitor.cs">
       <SubType>Form</SubType>
