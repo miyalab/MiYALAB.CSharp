@@ -1,23 +1,61 @@
-﻿using System;
-using System.Collections.Generic;
+﻿/*
+ * MIT License
+ * 
+ * Copyright (c) 2020-2021 MiYA LAB(K.Miyauchi)
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+*/
+
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace MiYALAB.CSharp.FileProcessor
+namespace MiYALAB.CSharp.File
 {
 	/// <summary>
 	/// return values of file control function
 	/// </summary>
 	public enum FileState
 	{
+		/// <summary>
+		/// OK
+		/// </summary>
 		OK = 0x0000,
+		/// <summary>
+		/// NOT EXIST
+		/// </summary>
 		NOT_EXIST = 0x0001,
+		/// <summary>
+		/// OPEN ERROR
+		/// </summary>
 		OPEN_ERROR = 0x0002,
+		/// <summary>
+		/// CLOSE ERROR
+		/// </summary>
 		CLOSE_ERROR = 0x0004,
+		/// <summary>
+		/// CREATE
+		/// </summary>
 		CREATE = 0x0008,
+		/// <summary>
+		/// NOT FOUND FILE
+		/// </summary>
 		NONE_FILENAME = 0x0010
 	}
 
@@ -56,7 +94,7 @@ namespace MiYALAB.CSharp.FileProcessor
 		public FileState Save()
 		{
 			if (fileName == "") return FileState.NONE_FILENAME;
-			return Save<objectType>(fileName, param); ;
+			return Save(fileName, param); ;
 		}
 
 		/// <summary>
@@ -65,9 +103,9 @@ namespace MiYALAB.CSharp.FileProcessor
 		public FileState Load()
 		{
 			if (fileName == "") return FileState.NONE_FILENAME;
-			if (Load<objectType>(fileName, ref __param) != FileState.OK)
+			if (Load(fileName, ref __param) != FileState.OK)
 			{
-				Save<objectType>(fileName, param);
+				Save(fileName, param);
 				return FileState.CREATE;
 			}
 			return FileState.OK;
@@ -76,9 +114,9 @@ namespace MiYALAB.CSharp.FileProcessor
 		/// <summary>
 		/// setting save
 		/// </summary>
-		public static FileState Save<type>(string filename, type savedata)
+		public static FileState Save(string filename, objectType savedata)
 		{
-			XmlSerializer serializer = new XmlSerializer(typeof(type));
+			XmlSerializer serializer = new XmlSerializer(typeof(objectType));
 			StreamWriter streamWriter = new StreamWriter(filename, false, new UTF8Encoding(false));
 			serializer.Serialize(streamWriter, savedata);
 			streamWriter.Close();
@@ -88,15 +126,15 @@ namespace MiYALAB.CSharp.FileProcessor
 		/// <summary>
 		/// setting load
 		/// </summary>
-		public static FileState Load<type>(string filename, ref type loaddata)
+		public static FileState Load(string filename, ref objectType loaddata)
 		{
-			if (!File.Exists(filename))
+			if (!System.IO.File.Exists(filename))
 			{
 				return FileState.NOT_EXIST;
 			}
-			XmlSerializer serializer = new XmlSerializer(typeof(type));
+			XmlSerializer serializer = new XmlSerializer(typeof(objectType));
 			StreamReader streamReader = new StreamReader(filename, new UTF8Encoding(false));
-			loaddata = (type)serializer.Deserialize(streamReader);
+			loaddata = (objectType)serializer.Deserialize(streamReader);
 			streamReader.Close();
 			return FileState.OK;
 		}

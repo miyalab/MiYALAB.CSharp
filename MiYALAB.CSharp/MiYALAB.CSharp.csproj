@@ -46,25 +46,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DebugMonitor.cs">
+    <Compile Include="Device\SerialPort.cs" />
+    <Compile Include="Monitor\DebugMonitor.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="DeviceProcessor.cs" />
+    <Compile Include="Device\DeviceProcessor.cs" />
     <Compile Include="FileProcessor.cs" />
     <Compile Include="GamepadProcessor.cs" />
-    <Compile Include="GraphicMonitor.cs">
+    <Compile Include="Monitor\GraphicMonitor.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ImageProcessor.Binary.cs" />
-    <Compile Include="ImageProcessor.cs" />
-    <Compile Include="ImageProcessor.Filter.cs" />
+    <Compile Include="Image\ImageProcessor.Binary.cs" />
+    <Compile Include="Image\ImageProcessor.cs" />
+    <Compile Include="Image\ImageProcessor.Filter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="DebugMonitor.resx">
+    <EmbeddedResource Include="Monitor\DebugMonitor.resx">
       <DependentUpon>DebugMonitor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GraphicMonitor.resx">
+    <EmbeddedResource Include="Monitor\GraphicMonitor.resx">
       <DependentUpon>GraphicMonitor.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>

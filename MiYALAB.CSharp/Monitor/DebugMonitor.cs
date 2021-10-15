@@ -28,13 +28,14 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace MiYALAB.CSharp.Monitor
 {
     /// <summary>
     /// デバッグモニタを表示するフォームクラスです．
     /// </summary>
-    public partial class DebugMonitor : System.Windows.Forms.Form
+    public partial class DebugMonitor : Form
     {
         private System.Windows.Forms.TextBox textBoxDebug;
 
@@ -141,10 +142,11 @@ namespace MiYALAB.CSharp.Monitor
             // 
             // DebugMonitor
             // 
-            this.ClientSize = new System.Drawing.Size(284, 261);
+            this.ClientSize = new Size(284, 261);
             this.ControlBox = false;
             this.Controls.Add(this.textBoxDebug);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Icon = ((Icon)(resources.GetObject("$this.Icon")));
+            this.ShowInTaskbar = false;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "DebugMonitor";
@@ -162,7 +164,7 @@ namespace MiYALAB.CSharp.Monitor
         /// <param name="e"></param>
         private void DebugMonitor_SizeChanged(object sender, EventArgs e)
         {
-            this.textBoxDebug.Size = new System.Drawing.Size(this.ClientSize.Width - 24, this.ClientSize.Height - 24);
+            this.textBoxDebug.Size = new Size(this.ClientSize.Width - 24, this.ClientSize.Height - 24);
         }
 
         /// <summary>

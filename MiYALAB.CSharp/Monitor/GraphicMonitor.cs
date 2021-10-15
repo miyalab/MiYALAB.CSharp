@@ -153,6 +153,7 @@ namespace MiYALAB.CSharp.Monitor
             this.ControlBox = false;
             this.Controls.Add(this.pictureBox);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.ShowInTaskbar = false;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "GraphicMonitor";

@@ -55,6 +55,7 @@ namespace MiYALAB.CSharp.Device
             }
 
             return devices.ToArray();
+
         }
     }
 
