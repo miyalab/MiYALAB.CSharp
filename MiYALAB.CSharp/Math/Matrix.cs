@@ -468,6 +468,25 @@ namespace MiYALAB.CSharp.Mathmatics
             ret.data = mat;
             return ret;
         }
+        /// <summary>
+        /// 二次元配列を行列変換メソッド
+        /// </summary>
+        /// <param name="mat"></param>
+        /// <returns></returns>
+        public static Matrix Double2DToMatrix(double[,] mat)
+        {
+            Matrix ret = new Matrix(mat.GetLength(0), mat.GetLength(1));
+
+            Parallel.For(0, ret.height, i =>
+            {
+                for(int j=0; j<ret.width; j++)
+                {
+                    ret[i, j] = mat[i, j];
+                }
+            });
+
+            return ret;
+        }
 
         //----------------------------------------------------------------------------------
         // Overload of operator
