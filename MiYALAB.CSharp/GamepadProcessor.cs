@@ -34,56 +34,98 @@ namespace MiYALAB.CSharp
         /// </summary>
         public class GamepadProcessor
         {
+            /// <summary></summary>
             public const int MM_JOY1MOVE = 0x3A0;
+            /// <summary></summary>
             public const int MM_JOY2MOVE = 0x3A1;
+            /// <summary></summary>
             public const int MM_JOY1ZMOVE = 0x3A2;
+            /// <summary></summary>
             public const int MM_JOY2ZMOVE = 0x3A3;
+            /// <summary></summary>
             public const int MM_JOY1BUTTONDOWN = 0x3B5;
+            /// <summary></summary>
             public const int MM_JOY2BUTTONDOWN = 0x3B6;
+            /// <summary></summary>
             public const int MM_JOY1BUTTONUP = 0x3B7;
+            /// <summary></summary>
             public const int MM_JOY2BUTTONUP = 0x3B8;
 
+            /// <summary></summary>
             public const int MMSYSERR_BADDEVICEID = 2;
+            /// <summary></summary>
             public const int MMSYSERR_NODRIVER = 6;
+            /// <summary></summary>
             public const int MMSYSERR_INVALPARAM = 11;
 
+            /// <summary></summary>
             public const int JOY_ERR_NONE = 0;
+            /// <summary></summary>
             public const int JOY_ERR_PARMS = 165;
+            /// <summary></summary>
             public const int JOY_ERR_NOCANDO = 166;
+            /// <summary></summary>
             public const int JOY_ERR_UNPLUGGED = 167;
-
+            
+            /// <summary></summary>
             public const int JOY_RETURN_X = 0x001;
+            /// <summary></summary>
             public const int JOY_RETURN_Y = 0x002;
+            /// <summary></summary>
             public const int JOY_RETURN_Z = 0x004;
+            /// <summary></summary>
             public const int JOY_RETURN_R = 0x008;
+            /// <summary></summary>
             public const int JOY_RETURN_U = 0x010;
+            /// <summary></summary>
             public const int JOY_RETURN_V = 0x020;
+            /// <summary></summary>
             public const int JOY_RETURN_POV = 0x040;
+            /// <summary></summary>
             public const int JOY_RETURN_BUTTONS = 0x080;
+            /// <summary></summary>
             public const int JOY_RETURN_ALL = 0x0FF;
 
+            /// <summary></summary>
             public const int JOY_RETURN_RAWDATA = 0x100;
+            /// <summary></summary>
             public const int JOY_RETURN_POVCTS = 0x200;
+            /// <summary></summary>
             public const int JOY_RETURN_CENTERED = 0x400;
 
+            /// <summary></summary>
             [StructLayout(LayoutKind.Sequential)]
             public struct JOYINFOEX
             {
+                /// <summary></summary>
                 public int dwSize;
+                /// <summary></summary>
                 public int dwFlags;
+                /// <summary></summary>
                 public int dwXpos;
+                /// <summary></summary>
                 public int dwYpos;
+                /// <summary></summary>
                 public int dwZpos;
+                /// <summary></summary>
                 public int dwRpos;
+                /// <summary></summary>
                 public int dwUpos;
+                /// <summary></summary>
                 public int dwVpos;
+                /// <summary></summary>
                 public int dwButtons;
+                /// <summary></summary>
                 public int dwButtonNumber;
+                /// <summary></summary>
                 public int dwPOV;
+                /// <summary></summary>
                 public int dwReserved1;
+                /// <summary></summary>
                 public int dwReserved2;
             }
 
+            /// <summary></summary>
             public static class GetInfo
             {
                 /// <summary>
@@ -102,9 +144,22 @@ namespace MiYALAB.CSharp
                 [DllImport("winmm.dll")]
                 public static extern int joyGetPosEx(int uJoyID, ref JOYINFOEX pji);
 
+                /// <summary>
+                /// 
+                /// </summary>
+                /// <param name="hwnd"></param>
+                /// <param name="uJoyID"></param>
+                /// <param name="uPeriod"></param>
+                /// <param name="fChanged"></param>
+                /// <returns></returns>
                 [DllImport("winmm.dll")]
                 public static extern int joySetCapture(IntPtr hwnd, int uJoyID, int uPeriod, int fChanged);
 
+                /// <summary>
+                /// 
+                /// </summary>
+                /// <param name="uJoyID"></param>
+                /// <returns></returns>
                 [DllImport("winmm.dll")]
                 public static extern int joyReleaseCapture(int uJoyID);
             }
