@@ -162,7 +162,6 @@ namespace MiYALAB.CSharp.Mathematics
         /// <summary>
         /// 行列の複製メソッド
         /// </summary>
-        /// <param name="mat"></param>
         /// <returns></returns>
         public Matrix Clone()
         {

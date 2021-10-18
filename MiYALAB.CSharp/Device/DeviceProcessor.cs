@@ -87,5 +87,19 @@ namespace MiYALAB.CSharp.Device
 
             return devices.ToArray();
         }
+
+        /// <summary>
+        /// device name convert com num
+        /// </summary>
+        /// <param name="deviceName"></param>
+        /// <returns></returns>
+        public static string GetComPort(string deviceName)
+        {
+            if (deviceName == "") return "";
+            int deviceComBegin = deviceName.IndexOf('(');
+            int deviceComEnd = deviceName.IndexOf(')');
+            return deviceName.Substring(deviceComBegin + 1, deviceComEnd - deviceComBegin - 1);
+        }
+
     }
 }
