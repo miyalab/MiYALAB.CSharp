@@ -28,7 +28,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MiYALAB.CSharp.Mathmatics
+namespace MiYALAB.CSharp.Mathematics
 {
     /// <summary>
     /// マルチスレッド処理化 行列計算クラス
