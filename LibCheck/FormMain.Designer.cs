@@ -41,7 +41,7 @@ namespace LibCheck
 			this.buttonCheck.TabIndex = 0;
 			this.buttonCheck.Text = "開く";
 			this.buttonCheck.UseVisualStyleBackColor = true;
-			this.buttonCheck.Click += new System.EventHandler(this.buttonCheck_Click);
+			this.buttonCheck.Click += new System.EventHandler(this.button1_Click);
 			// 
 			// textBoxLog
 			// 

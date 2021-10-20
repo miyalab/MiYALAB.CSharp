@@ -56,16 +56,46 @@ namespace MiYALAB.CSharp.Mathematics
         /// <summary>
         /// マルチスレッド処理化 行列計算クラスのコンストラクタ
         /// </summary>
-        /// <param name="height"></param>
-        /// <param name="width"></param>
-        public Matrix(int height, int width)
+        /// <param name="__height"></param>
+        /// <param name="__width"></param>
+        public Matrix(int __height, int __width)
         {
             // 配列の初期化
-            data = new double[height][];
-            for (int i = 0; i < height; i++)
+            data = new double[__height][];
+            for (int i = 0; i < __height; i++)
             {
-                data[i] = new double[width];
+                data[i] = new double[__width];
             }
+        }
+        /// <summary>
+        /// マルチスレッド処理化 行列計算クラスのコンストラクタ
+        /// </summary>
+        /// <param name="mat"></param>
+        public Matrix(double[,] mat)
+        {
+            // 配列の初期化
+            data = new double[mat.GetLength(0)][];
+            for (int i = 0; i < this.height; i++)
+            {
+                data[i] = new double[mat.GetLength(1)];
+            }
+
+            // 配列の初期化
+            Parallel.For(0, this.height, i => 
+            {
+                for(int j=0; j<this.width; j++)
+                {
+                    this[i, j] = mat[i, j];
+                }
+            });
+        }
+        /// <summary>
+        /// マルチスレッド処理化 行列計算クラスのコンストラクタ
+        /// </summary>
+        /// <param name="mat"></param>
+        public Matrix(double[][] mat)
+        {
+            data = (double[][])mat.Clone();
         }
 
         //----------------------------------------------------------------------------------
@@ -319,6 +349,26 @@ namespace MiYALAB.CSharp.Mathematics
             return Mult(k, mat1);
         }
         /// <summary>
+        /// 行列のスカラ積メソッド
+        /// </summary>
+        /// <param name="mat1"></param>
+        /// <param name="k"></param>
+        /// <returns></returns>
+        public static Matrix Div(Matrix mat1, double k)
+        {
+            Matrix ret = new Matrix(mat1.height, mat1.width);
+
+            Parallel.For(0, mat1.height, i =>
+            {
+                for (int j = 0; j < mat1.width; j++)
+                {
+                    ret[i, j] = mat1[i, j] / k;
+                }
+            });
+
+            return ret;
+        }
+        /// <summary>
         /// 行列の転置行列計算メソッド
         /// </summary>
         /// <param name="mat"></param>
@@ -540,5 +590,16 @@ namespace MiYALAB.CSharp.Mathematics
         {
             return Mult(mat1, k);
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="mat1"></param>
+        /// <param name="k"></param>
+        /// <returns></returns>
+        public static Matrix operator /(Matrix mat1, double k)
+        {
+            return Div(mat1, k);
+        }
+
     }
 }

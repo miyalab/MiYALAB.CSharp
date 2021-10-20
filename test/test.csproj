@@ -10,6 +10,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MiYALAB.CSharp\MiYALAB.CSharp.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="System.Management">
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.Management.dll</HintPath>
     </Reference>
