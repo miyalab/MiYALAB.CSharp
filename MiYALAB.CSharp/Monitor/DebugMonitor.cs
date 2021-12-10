@@ -37,7 +37,12 @@ namespace MiYALAB.CSharp.Monitor
     /// </summary>
     public partial class DebugMonitor : Form
     {
-        private System.Windows.Forms.TextBox textBoxDebug;
+        /// <summary>
+        /// タイムスタンプ表示
+        /// </summary>
+        public bool timeStamp { get; set; } = false;
+        private bool lf { get; set; } = true;
+        private TextBox textBoxDebug;
 
         /// <summary>
         /// デバッグモニタを表示するフォームクラスです．
@@ -193,7 +198,11 @@ namespace MiYALAB.CSharp.Monitor
         /// <param name="text">挿入テキスト</param>
         public void Write(string text)
         {
-            this.textBoxDebug.AppendText(text);
+            string write = "";
+            if (lf) write = $"{DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")} : ";
+            write += text;
+            this.textBoxDebug.AppendText(write);
+            lf = false;
         }
 
         /// <summary>
@@ -202,7 +211,11 @@ namespace MiYALAB.CSharp.Monitor
         /// <param name="text">挿入テキスト</param>
         public void WriteLine(string text)
         {
-            this.textBoxDebug.AppendText(text + Environment.NewLine);
+            string write = "";
+            if (lf && timeStamp) write = $"{DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")} : ";
+            write += text + Environment.NewLine;
+            this.textBoxDebug.AppendText(write);
+            lf = true;
         }
         
         /// <summary>
