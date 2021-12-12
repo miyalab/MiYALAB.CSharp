@@ -236,6 +236,7 @@ namespace MiYALAB.CSharp.Mathematics
             
             return ret;
         }
+
         /// <summary>
         /// 行列の加算メソッド
         /// </summary>
@@ -262,6 +263,7 @@ namespace MiYALAB.CSharp.Mathematics
                 throw new Exception("Input a matrix of the same size.");
             }
         }
+
         /// <summary>
         /// 行列の減算メソッド
         /// </summary>
@@ -288,6 +290,7 @@ namespace MiYALAB.CSharp.Mathematics
                 throw new Exception("Input a matrix of the same size.");
             }
         }
+
         /// <summary>
         /// 行列の乗算メソッド
         /// </summary>
@@ -318,6 +321,7 @@ namespace MiYALAB.CSharp.Mathematics
                 throw new Exception("Input a matrix with the same width of mat1 and height of mat2");
             }
         }
+
         /// <summary>
         /// 行列のスカラ積メソッド
         /// </summary>
@@ -338,6 +342,7 @@ namespace MiYALAB.CSharp.Mathematics
 
             return ret;
         }
+
         /// <summary>
         /// 行列のスカラ積メソッド
         /// </summary>
@@ -348,6 +353,7 @@ namespace MiYALAB.CSharp.Mathematics
         {
             return Mult(k, mat1);
         }
+
         /// <summary>
         /// 行列のスカラ積メソッド
         /// </summary>
@@ -368,6 +374,7 @@ namespace MiYALAB.CSharp.Mathematics
 
             return ret;
         }
+
         /// <summary>
         /// 行列の転置行列計算メソッド
         /// </summary>
@@ -386,6 +393,7 @@ namespace MiYALAB.CSharp.Mathematics
 
             return ret;
         }
+
         /// <summary>
         /// 行列のLUP分解メソッド
         /// </summary>
@@ -431,6 +439,7 @@ namespace MiYALAB.CSharp.Mathematics
             }
             return ret;
         }
+
         /// <summary>
         /// 行列の逆行列計算の補助計算メソッド
         /// </summary>
@@ -458,6 +467,7 @@ namespace MiYALAB.CSharp.Mathematics
             }
             return x;
         }
+
         /// <summary>
         /// 行列の逆行列計算メソッド
         /// </summary>
@@ -484,6 +494,7 @@ namespace MiYALAB.CSharp.Mathematics
             }
             return ret;
         }
+
         /// <summary>
         /// 行列の行列式計算メソッド
         /// </summary>
@@ -497,6 +508,7 @@ namespace MiYALAB.CSharp.Mathematics
             Parallel.For(0, lum.mat.height, i => { ret *= lum.mat[i][i]; });
             return ret;
         }
+
         /// <summary>
         /// 行列データを二次元配列変換メソッド
         /// </summary>
@@ -506,6 +518,7 @@ namespace MiYALAB.CSharp.Mathematics
         {
             return (double[][])mat.data.Clone();
         }
+
         /// <summary>
         /// 二次元配列を行列変換メソッド
         /// </summary>
@@ -517,6 +530,7 @@ namespace MiYALAB.CSharp.Mathematics
             ret.data = mat;
             return ret;
         }
+
         /// <summary>
         /// 二次元配列を行列変換メソッド
         /// </summary>
@@ -537,6 +551,32 @@ namespace MiYALAB.CSharp.Mathematics
             return ret;
         }
 
+        /// <summary>
+        /// 行列の比較メソッド
+        /// </summary>
+        /// <param name="mat1"></param>
+        /// <param name="mat2"></param>
+        /// <returns></returns>
+        public static bool Equals(Matrix mat1, Matrix mat2)
+        {
+            if (mat1.height != mat2.height || mat1.width != mat2.width) return false;
+
+            bool ret = true;
+            Parallel.For(0, mat1.height, i =>
+            {
+                for (int j = 0; j < mat1.width; j++)
+                {
+                    if (mat1[i, j] != mat2[i, j])
+                    {
+                        ret = false;
+                        return;
+                    }
+                }
+            });
+
+            return ret;
+        }
+
         //----------------------------------------------------------------------------------
         // Overload of operator
         //----------------------------------------------------------------------------------
@@ -550,6 +590,7 @@ namespace MiYALAB.CSharp.Mathematics
         {
             return Add(mat1, mat2);
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -560,6 +601,7 @@ namespace MiYALAB.CSharp.Mathematics
         {
             return Sub(mat1, mat2);
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -570,6 +612,7 @@ namespace MiYALAB.CSharp.Mathematics
         {
             return Mult(mat1, mat2);
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -580,6 +623,7 @@ namespace MiYALAB.CSharp.Mathematics
         {
             return Mult(k, mat1);
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -590,6 +634,7 @@ namespace MiYALAB.CSharp.Mathematics
         {
             return Mult(mat1, k);
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -599,6 +644,28 @@ namespace MiYALAB.CSharp.Mathematics
         public static Matrix operator /(Matrix mat1, double k)
         {
             return Div(mat1, k);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="mat1"></param>
+        /// <param name="mat2"></param>
+        /// <returns></returns>
+        public static bool operator ==(Matrix mat1, Matrix mat2)
+        {
+            return Equals(mat1, mat2);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="mat1"></param>
+        /// <param name="mat2"></param>
+        /// <returns></returns>
+        public static bool operator !=(Matrix mat1, Matrix mat2)
+        {
+            return !(mat1 == mat2);
         }
 
     }

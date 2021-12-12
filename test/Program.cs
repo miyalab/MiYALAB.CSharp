@@ -13,45 +13,23 @@ namespace ConsoleApplication1
 {
     class Program
     {
-        
+
         static void Main(string[] args)
         {
-            var stopWatch = Stopwatch.StartNew();
+            Matrix mat1, mat2;
 
-            Parallel.For(0, 10000, i =>
-            {
-                Parallel.For(0, 5000, j => Method(i, j));
+            mat1 = Matrix.Double2DToMatrix(new double[,]{
+                { 1,2,3},
+                { 4,5,6},
+                { 7,8,9}
             });
 
-            stopWatch.Stop();
-            Console.WriteLine("{0}", stopWatch.ElapsedMilliseconds);
-
-            stopWatch.Restart();
-
-            Parallel.For(0, 10000, i =>
-            {
-                for (int j = 0; j < 5000; ++j)
-                {
-                    Method(i, j);
-                }
+            mat2 = Matrix.Double2DToMatrix(new double[,]{
+                { 1,2,3},
+                { 4,5,6},
+                { 7,8,9}
             });
-
-            stopWatch.Stop();
-            Console.WriteLine("{0}", stopWatch.ElapsedMilliseconds);
-
-            stopWatch.Restart();
-
-            for(int i=0; i<10000; i++)
-            {
-                for (int j = 0; j < 5000; ++j)
-                {
-                    Method(i, j);
-                }
-            }
-
-            stopWatch.Stop();
-            Console.WriteLine("{0}", stopWatch.ElapsedMilliseconds);
-
+            Console.WriteLine(Matrix.Equals(mat1, mat2));
         }
         private static void Method(int n1, int n2)
         {
