@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Device\SerialPort.cs" />
+    <Compile Include="Math\Basic.cs" />
     <Compile Include="Math\Matrix.cs" />
     <Compile Include="Monitor\DebugMonitor.cs">
       <SubType>Form</SubType>
