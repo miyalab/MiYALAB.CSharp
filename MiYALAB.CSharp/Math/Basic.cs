@@ -54,5 +54,29 @@ namespace MiYALAB.CSharp.Mathematics
         {
             return rad * 180 / Math.PI;
         }
+
+        /// <summary>
+        /// 拡張arctan関数
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns>0~2π[rad]</returns>
+        public static double AtanEx(double x, double y)
+        {
+            double ret = Math.Atan(y / x);
+            
+            // 第2象限
+            if(x < 0 && y > 0)
+            {
+                ret += Math.PI;
+            }
+            // 第3象限
+            if(x < 0 && y < 0)
+            {
+                ret -= Math.PI;
+            }
+
+            return ret;
+        }
     }
 }
