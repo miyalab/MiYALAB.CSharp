@@ -60,7 +60,7 @@ namespace MiYALAB.CSharp.Mathematics
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
-        /// <returns>0~2π[rad]</returns>
+        /// <returns>-π~π[rad]</returns>
         public static double AtanEx(double x, double y)
         {
             double ret = Math.Atan(y / x);
